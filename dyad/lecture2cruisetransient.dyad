@@ -1,0 +1,20 @@
+
+"Lecture 2 - Mapped engine cruise experiment"
+
+analysis Lecture2CruiseTransient
+  extends Dyad.TransientAnalysis(stop = 60)
+
+  parameter speed_kmh::Real = 90
+  parameter pedal_cmd::Real = 0.0916
+  parameter rpm0::Real = 2182
+  parameter p_m0::Pressure = 54420
+
+  model = VehicleSystemsComponents.HandsOn02.MappedCarCruise(
+    speed_kmh = speed_kmh,
+    pedal_cmd = pedal_cmd,
+    rpm0 = rpm0,
+    p_m0 = p_m0
+  )
+
+relations
+end

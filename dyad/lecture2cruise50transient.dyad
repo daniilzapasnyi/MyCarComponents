@@ -1,0 +1,20 @@
+
+"Lecture 2 - Trial cruise at 50 km/h"
+
+analysis Lecture2Cruise50Transient
+  extends Dyad.TransientAnalysis(stop = 60)
+
+  parameter speed_kmh::Real = 50
+  parameter pedal_cmd::Real = 0.0486
+  parameter rpm0::Real = 2182
+  parameter p_m0::Pressure = 54420
+
+  model = VehicleSystemsComponents.HandsOn02.MappedCarCruise(
+    speed_kmh = speed_kmh,
+    pedal_cmd = pedal_cmd,
+    rpm0 = rpm0,
+    p_m0 = p_m0
+  )
+
+relations
+end
