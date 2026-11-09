@@ -1,0 +1,61 @@
+"Driveline model with gearbox and rolling wheel"
+component Driveline
+  spline = Spline() {^spline}
+  support_r = Spline() {^support_r}
+  flange = Flange() {^flange}
+  support_t = Flange() {^support_t}
+  gear = RotationalComponents.Components.IdealGear(ratio = i) {^gear}
+  wheel = RotationalComponents.Components.IdealRollingWheel(radius = r) {^wheel}
+  inertia = RotationalComponents.Components.Inertia(J = J_w) {^inertia}
+  parameter i::Real = 4.0
+  parameter r::Length = 0.31
+  parameter J_w::MomentOfInertia = 2.0
+relations
+  connect(spline, gear.spline_a) {^id8}
+  connect(gear.spline_b, inertia.spline_a) {^id9}
+  connect(inertia.spline_b, wheel.spline) {^id10}
+  connect(wheel.flange, flange) {^id11}
+  connect(gear.support, support_r) {^id12}
+  connect(wheel.support_r, support_r) {^id13}
+  connect(wheel.support_t, support_t) {^id14}
+metadata {
+  "_links": {
+    "spline": {"Dyad": {"placement": {"diagram": {"x1": 20, "x2": 120, "y1": 20, "y2": 120}}}},
+    "support_r": {
+      "Dyad": {"placement": {"diagram": {"x1": 530, "x2": 630, "y1": 260, "y2": 360}}}
+    },
+    "flange": {
+      "Dyad": {"placement": {"diagram": {"x1": 530, "x2": 630, "y1": 20, "y2": 120}}}
+    },
+    "support_t": {
+      "Dyad": {"placement": {"diagram": {"x1": 530, "x2": 630, "y1": 140, "y2": 240}}}
+    },
+    "gear": {
+      "Dyad": {"placement": {"diagram": {"x1": 145, "x2": 245, "y1": 20, "y2": 120}}}
+    },
+    "wheel": {
+      "Dyad": {"placement": {"diagram": {"x1": 405, "x2": 505, "y1": 20, "y2": 120}}}
+    },
+    "inertia": {
+      "Dyad": {"placement": {"diagram": {"x1": 270, "x2": 370, "y1": 20, "y2": 120}}}
+    },
+    "id8": {"Dyad": {"edges": [{"S": 1, "M": [], "E": 2}], "path": {}}},
+    "id9": {"Dyad": {"edges": [{"S": 1, "M": [], "E": 2}], "path": {}}},
+    "id10": {"Dyad": {"edges": [{"S": 1, "M": [], "E": 2}], "path": {}}},
+    "id11": {"Dyad": {"edges": [{"S": 1, "M": [], "E": 2}], "path": {}}},
+    "id12": {
+      "Dyad": {
+        "edges": [{"S": 1, "M": [{"x": 195, "y": 326.66666666666663}], "E": 2}],
+        "path": {}
+      }
+    },
+    "id13": {
+      "Dyad": {
+        "edges": [{"S": 1, "M": [{"x": 420, "y": 293.3333333333333}], "E": 2}],
+        "path": {}
+      }
+    },
+    "id14": {"Dyad": {"edges": [{"S": 1, "M": [{"x": 490, "y": 190}], "E": 2}], "path": {}}}
+  }
+}
+end

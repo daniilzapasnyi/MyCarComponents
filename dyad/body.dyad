@@ -1,0 +1,24 @@
+"Vehicle body with aerodynamic drag and rolling resistance"
+component Body
+  flange = Flange()
+  mass = TranslationalComponents.Components.Mass(m = m)
+  drag = TranslationalComponents.Sources.QuadraticSpeedDependentForce(ForceDirection = false, v_nominal = v_nominal, f_nominal = -0.5 * rho * CdA * v_nominal ^ 2)
+  rolling = TranslationalComponents.Components.RollingResistance(fWeight = m * g)
+  cr_const = BlockComponents.Sources.Constant(k = f_r)
+  incl_const = BlockComponents.Sources.Constant(k = 0)
+  ground = TranslationalComponents.Components.Fixed()
+  parameter m::Dyad.Mass = 1400
+  parameter CdA::Area = 0.63
+  parameter rho::Density = 1.2
+  parameter f_r::Real = 0.012
+  parameter g::Acceleration = 9.80665
+  parameter v_nominal::Velocity = 30
+relations
+  connect(flange, mass.flange_a)
+  connect(drag.flange, mass.flange_a)
+  connect(rolling.flange, mass.flange_a)
+  connect(drag.support, ground.flange)
+  connect(rolling.support, ground.flange)
+  connect(cr_const.y, rolling.cr)
+  connect(incl_const.y, rolling.inclination)
+end

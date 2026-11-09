@@ -1,0 +1,14 @@
+
+"Full throttle acceleration test"
+
+component CarFullThrottle
+  cmd = BlockComponents.Sources.Constant(k = 150)
+  car = Car()
+
+relations
+  connect(cmd.y, car.tau_cmd)
+
+  initial car.body.mass.s = 0
+  initial car.body.mass.v = 0
+  initial car.engine.lag.x = 0
+end

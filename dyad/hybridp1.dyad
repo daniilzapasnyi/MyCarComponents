@@ -1,0 +1,37 @@
+
+"Hybrid car with electric motor before gearbox"
+
+component HybridP1
+  tau_cmd = RealInput()
+  motor_cmd = RealInput()
+  v_kmh = RealOutput()
+
+  engine = Engine()
+  motor = ElectricMotor()
+  driveline = Driveline()
+  body = Body()
+
+  vsensor = TranslationalComponents.Sensors.VelocitySensor()
+  to_kmh = BlockComponents.Math.Gain(k = 3.6)
+
+  rot_ground = RotationalComponents.Components.Fixed()
+  trans_ground = TranslationalComponents.Components.Fixed()
+
+relations
+  connect(tau_cmd, engine.tau_cmd)
+  connect(motor_cmd, motor.torque_cmd)
+
+  connect(engine.spline, driveline.spline)
+  connect(motor.spline, driveline.spline)
+
+  connect(engine.support, rot_ground.spline)
+  connect(motor.support, rot_ground.spline)
+  connect(driveline.support_r, rot_ground.spline)
+
+  connect(driveline.flange, body.flange)
+  connect(driveline.support_t, trans_ground.flange)
+
+  connect(vsensor.flange, body.flange)
+  connect(vsensor.v, to_kmh.u)
+  connect(to_kmh.y, v_kmh)
+end

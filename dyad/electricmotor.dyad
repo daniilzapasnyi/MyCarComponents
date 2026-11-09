@@ -1,0 +1,23 @@
+
+"Simple electric motor with commanded torque"
+
+component ElectricMotor
+  torque_cmd = RealInput()
+  spline = Spline()
+  support = Spline()
+
+  limiter = BlockComponents.Nonlinear.Limiter(
+    y_max = T_max,
+    y_min = -T_max
+  )
+
+  torque = RotationalComponents.Sources.TorqueSource()
+
+  parameter T_max::Torque = 100
+
+relations
+  connect(torque_cmd, limiter.u)
+  connect(limiter.y, torque.tau)
+  connect(torque.spline, spline)
+  connect(torque.support, support)
+end
