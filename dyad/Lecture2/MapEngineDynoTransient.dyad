@@ -1,0 +1,5 @@
+"Reproducible MapEngineDyno experiment; see the lecture report for validation status."
+analysis MapEngineDynoTransient
+  extends TransientAnalysis(stop = 3, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = MapEngineDyno()
+end

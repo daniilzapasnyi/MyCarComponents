@@ -18,4 +18,8 @@ end
 @testset "`MyCarComponents.Lecture2`" begin
 include("AirPathStep_test.jl")
 include("AirPath_test.jl")
+include("MapEngineDyno_test.jl")
+include("MapEngineFuelCutDyno_test.jl")
+include("MapEngineFuelCut_test.jl")
+include("MapEngine_test.jl")
 end

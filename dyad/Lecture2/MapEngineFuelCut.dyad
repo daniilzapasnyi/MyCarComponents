@@ -1,0 +1,85 @@
+# Adapted from the official 16ESPD build guide / HandsOn02/MapEngineFuelCut.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component MapEngineFuelCut
+  "Pedal, 0 released to 1 floored"
+  pedal = RealInput() {^pedal}
+  "Vacuum take-off: the hose to the brake booster, at manifold pressure"
+  vacuum = VehicleSystemsComponents.Vehicle.GasPort() {^vacuum}
+  "Output shaft"
+  spline = Spline() {^spline}
+  "Engine mounts"
+  support = Spline() {^support}
+  "Manifold absolute pressure [Pa]"
+  p_m = RealOutput() {^p_m}
+  "Fuel mass flow [kg/s]"
+  mdot_fuel = RealOutput() {^mdot_fuel}
+  "CO2 mass flow [kg/s]"
+  mdot_co2 = RealOutput() {^mdot_co2}
+  air = AirPath() {^air}
+  speed = RotationalComponents.Sensors.VelocitySensor() {^speed}
+  torque_map = VehicleSystemsComponents.Vehicle.Engine.CutTorqueMap() {^torque_map}
+  fuel_map = VehicleSystemsComponents.Vehicle.Engine.CutFuelMap() {^fuel_map}
+  "Fuel cut on overrun and at the rev limiter"
+  cut_logic = VehicleSystemsComponents.Vehicle.Engine.FuelCutLogic() {^cut_logic}
+  "CO2 per kilogram of petrol burned completely, 3.09 (textbook)"
+  co2 = BlockComponents.Math.Gain(k = 3.09) {^co2}
+  torque = RotationalComponents.Sources.TorqueSource() {^torque}
+relations
+  connect(pedal, air.u_thr) {^wire1}
+  connect(vacuum, air.vacuum) {^wire2}
+  connect(speed.w, air.omega) {^wire3}
+  connect(speed.w, torque_map.omega) {^wire4}
+  connect(speed.w, fuel_map.omega) {^wire5}
+  connect(air.p_m, torque_map.p_m) {^wire6}
+  connect(air.p_m, fuel_map.p_m) {^wire7}
+  connect(air.p_m, p_m) {^wire8}
+  connect(torque_map.y, torque.tau) {^wire9}
+  connect(fuel_map.y, co2.u) {^wire10}
+  connect(fuel_map.y, mdot_fuel) {^wire11}
+  connect(co2.y, mdot_co2) {^wire12}
+  connect(torque.spline, spline) {^wire13}
+  connect(speed.spline, spline) {^wire14}
+  connect(torque.support, support) {^wire15}
+  connect(pedal, cut_logic.pedal) {^wire16}
+  connect(speed.w, cut_logic.omega) {^wire17}
+  connect(cut_logic.cut, fuel_map.cut) {^wire18}
+  connect(cut_logic.cut, torque_map.cut) {^wire19}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/Vehicle/Engine/MappedEngine.svg"}},
+  "_links": {
+    "pedal": {"Dyad":{"placement":{"icon":{"x1":-50,"y1":250,"x2":50,"y2":350},"diagram":{"x1":-25,"y1":331,"x2":25,"y2":381}}}},
+    "vacuum": {"Dyad":{"placement":{"icon":{"iconName":"gas_port_a","x1":150,"y1":950,"x2":250,"y2":1050},"diagram":{"iconName":"gas_port_a","x1":-25,"y1":385,"x2":25,"y2":435}}}},
+    "spline": {"Dyad":{"placement":{"icon":{"iconName":"spline_b","x1":950,"y1":850,"x2":1050,"y2":950},"diagram":{"iconName":"spline_b","x1":975,"y1":245,"x2":1025,"y2":295}}}},
+    "support": {"Dyad":{"placement":{"icon":{"x1":450,"y1":950,"x2":550,"y2":1050},"diagram":{"x1":975,"y1":355,"x2":1025,"y2":405}}}},
+    "p_m": {"Dyad":{"placement":{"icon":{"x1":950,"y1":50,"x2":1050,"y2":150},"diagram":{"x1":975,"y1":855,"x2":1025,"y2":905}}}},
+    "mdot_fuel": {"Dyad":{"placement":{"icon":{"x1":950,"y1":350,"x2":1050,"y2":450},"diagram":{"x1":975,"y1":535,"x2":1025,"y2":585}}}},
+    "mdot_co2": {"Dyad":{"placement":{"icon":{"x1":950,"y1":450,"x2":1050,"y2":550},"diagram":{"x1":975,"y1":675,"x2":1025,"y2":725}}}},
+    "air": {"Dyad":{"placement":{"diagram":{"x1":100,"y1":320,"x2":280,"y2":500}}}},
+    "speed": {"Dyad":{"placement":{"diagram":{"x1":830,"y1":90,"x2":950,"y2":210}}}},
+    "torque_map": {"Dyad":{"placement":{"diagram":{"x1":400,"y1":190,"x2":560,"y2":350}}}},
+    "fuel_map": {"Dyad":{"placement":{"diagram":{"x1":400,"y1":480,"x2":560,"y2":640}}}},
+    "cut_logic": {"Dyad":{"placement":{"diagram":{"x1":110,"y1":640,"x2":270,"y2":800}}}},
+    "co2": {"Dyad":{"placement":{"diagram":{"x1":660,"y1":650,"x2":760,"y2":750}}}},
+    "torque": {"Dyad":{"placement":{"diagram":{"x1":650,"y1":210,"x2":770,"y2":330}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":975,"y":150},{"x":975,"y":40},{"x":305,"y":40},{"x":305,"y":580},{"x":50,"y":580},{"x":50,"y":464}],"E":2}]}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[{"x":975,"y":150},{"x":975,"y":40},{"x":355,"y":40},{"x":355,"y":238}],"E":2}]}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":975,"y":150},{"x":975,"y":40},{"x":355,"y":40},{"x":355,"y":528}],"E":2}]}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":330,"y":410},{"x":330,"y":302}],"E":2}]}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[{"x":330,"y":410},{"x":330,"y":592}],"E":2}]}},
+    "wire8": {"Dyad":{"edges":[{"S":1,"M":[{"x":330,"y":410},{"x":330,"y":880}],"E":2}]}},
+    "wire9": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire10": {"Dyad":{"edges":[{"S":1,"M":[{"x":600,"y":560},{"x":600,"y":700}],"E":2}]}},
+    "wire11": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire12": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire13": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire14": {"Dyad":{"edges":[{"S":1,"M":[{"x":800,"y":150},{"x":800,"y":270}],"E":2}]}},
+    "wire15": {"Dyad":{"edges":[{"S":1,"M":[{"x":790,"y":330},{"x":790,"y":380}],"E":2}]}},
+    "wire16": {"Dyad":{"edges":[{"S":1,"M":[{"x":35,"y":356},{"x":35,"y":688}],"E":2}]}},
+    "wire17": {"Dyad":{"edges":[{"S":1,"M":[{"x":975,"y":150},{"x":975,"y":40},{"x":305,"y":40},{"x":305,"y":580},{"x":50,"y":580},{"x":50,"y":752}],"E":2}]}},
+    "wire18": {"Dyad":{"edges":[{"S":1,"M":[{"x":580,"y":720},{"x":580,"y":640}],"E":2}]}},
+    "wire19": {"Dyad":{"edges":[{"S":1,"M":[{"x":580,"y":720},{"x":580,"y":350}],"E":2}]}}
+  }
+}
+end

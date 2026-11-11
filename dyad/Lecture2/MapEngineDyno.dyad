@@ -1,0 +1,41 @@
+# Adapted from the official 16ESPD build guide / HandsOn02/MapEngineDyno.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component MapEngineDyno
+  "Held engine speed [rpm], 90 km/h cruise (deck)"
+  parameter rpm::Real = 3080.0
+  "Pedal before the step, holds 31.1 N.m at 3080 rpm (derived)"
+  parameter pedal_initial::Real = 0.1034
+  "Pedal after the step (assumed)"
+  parameter pedal_final::Real = 0.12
+  "Pedal step time (assumed)"
+  parameter t_step::Time = 1.0
+  "Initial manifold pressure, steady at the initial pedal (derived)"
+  parameter p_m0::Pressure = 47829.1
+  pedal = BlockComponents.Sources.Step(height = pedal_final - pedal_initial, offset = pedal_initial, start_time = t_step) {^pedal}
+  speed = BlockComponents.Sources.Constant(k = rpm * pi / 30) {^speed}
+  engine = MapEngine() {^engine}
+  dyno = RotationalComponents.Sources.VelocitySource() {^dyno}
+  mounts = RotationalComponents.Components.Fixed() {^mounts}
+relations
+  connect(pedal.y, engine.pedal) {^wire1}
+  connect(speed.y, dyno.w_ref) {^wire2}
+  connect(engine.spline, dyno.spline) {^wire3}
+  connect(engine.support, mounts.spline) {^wire4}
+  connect(dyno.support, mounts.spline) {^wire5}
+  initial dyno.phi = 0
+  initial engine.air.manifold.p = p_m0
+metadata {
+  "_links": {
+    "pedal": {"Dyad":{"placement":{"diagram":{"x1":100,"y1":300,"x2":200,"y2":400}}}},
+    "speed": {"Dyad":{"placement":{"diagram":{"x1":700,"y1":370,"x2":800,"y2":470}}}},
+    "engine": {"Dyad":{"placement":{"diagram":{"x1":350,"y1":250,"x2":550,"y2":450}}}},
+    "dyno": {"Dyad":{"placement":{"diagram":{"x1":900,"y1":370,"x2":1000,"y2":470}}}},
+    "mounts": {"Dyad":{"placement":{"diagram":{"x1":400,"y1":650,"x2":500,"y2":750}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":270,"y":350},{"x":270,"y":310}],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":600,"y":430},{"x":600,"y":300},{"x":1050,"y":300},{"x":1050,"y":420}],"E":2}]}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":950,"y":600},{"x":450,"y":600}],"E":2}]}}
+  }
+}
+end
