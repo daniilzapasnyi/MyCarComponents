@@ -50,3 +50,10 @@ sim(2,"mapped_WLTC",L2.MappedCarWLTC;stop=1800,dt=0.1,dtmax=0.1,
         end
     end)
 end
+if isempty(SELECTED) || 3 in SELECTED
+for (id,brake,engine,ref) in [("TCS_off",0.0,0.0,5.64),("TCS_brake",1.0,0.0,5.99),("TCS_engine",0.0,1.0,6.62),("TCS_both",1.0,1.0,6.45)]
+    sim(3,id,L3.TCSStart;stop=10,dt=0.005,alg=ODEAlg.Tsit5(),dtmax=0.001,abstol=1e-5,reltol=1e-5,
+        kwargs=(brake_enabled=brake,engine_enabled=engine),paths=["speed_mps"=>"car.v","slip_ratio"=>"car.kappa","engine_radps"=>"car.flywheel.w"],
+        evaluate=(r,m,t,v,d)->compare!(d,"final_speed_mps",last(v["speed_mps"]),ref,0.15))
+end
+end
