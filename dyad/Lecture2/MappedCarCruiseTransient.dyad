@@ -1,0 +1,5 @@
+"Reproducible MappedCarCruise experiment; see the lecture report for validation status."
+analysis MappedCarCruiseTransient
+  extends TransientAnalysis(stop = 60, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = MappedCarCruise()
+end
