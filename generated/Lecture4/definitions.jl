@@ -206,6 +206,8 @@ component.
 end
 
 
+include("BEVWLTCTransient_definition.jl")
+include("BEVWLTC_definition.jl")
 include("BatteryDischargeTransient_definition.jl")
 include("BatteryDischarge_definition.jl")
 include("Battery_definition.jl")
@@ -215,4 +217,5 @@ include("Converter_definition.jl")
 include("DCMachineDynoTransient_definition.jl")
 include("DCMachineDyno_definition.jl")
 include("DCMachine_definition.jl")
+include("ElectricDrive_definition.jl")
 include("FieldEMF_definition.jl")
