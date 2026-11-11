@@ -1,0 +1,31 @@
+# Adapted from official 16ESPD HandsOn/SlipCar.dyad (SlipCarStandingStart).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component SlipCarStandingStart
+  "Full throttle"
+  cmd = BlockComponents.Sources.Constant(k = 150) {^cmd}
+  "Flat road"
+  road = BlockComponents.Sources.Constant(k = 0) {^road}
+  "Slippery road; 1.0 is dry"
+  friction = BlockComponents.Sources.Constant(k = 0.2) {^friction}
+  car = SlipCar() {^car}
+relations
+  connect(cmd.y, car.tau_cmd) {^wire1}
+  connect(road.y, car.grade) {^wire2}
+  connect(friction.y, car.mu_scale) {^wire3}
+  initial car.body.mass.s = 0
+  initial car.body.mass.v = 0
+  initial car.engine.lag.x = 0
+  initial car.wheel_inertia.phi = 0
+  initial car.wheel_inertia.w = 0
+metadata {
+  "_links": {
+    "cmd": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":650,"y2":750}}}},
+    "road": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":250,"y2":350}}}},
+    "friction": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":450,"y2":550}}}},
+    "car": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":400,"y":700},{"x":400,"y":535}],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":300,"y":300},{"x":300,"y":457}],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":350,"y":500},{"x":350,"y":472}],"E":2}],"path":{}}}
+  }
+}
+end
