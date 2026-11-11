@@ -1,0 +1,5 @@
+# Course sources and model ownership
+
+The official [16ESPD site](https://dr14-make.github.io/16ESPD/) and [course repository](https://github.com/dr14-make/16ESPD) specify the exercises. Model sources credit the supplied examples. CSVs and plots come from local simulations.
+
+- **Lecture 1:** GradeForce, GradeBody, ideal Driveline, Car, slip tire/wheel/car, inertial comparison and component test benches are adapted from the supplied `HandsOn` build solutions. They reuse the existing student Engine and Body where applicable. The new combined CruiseController and CruiseExperiment implement the guide's block structure, selectable P/PI/PID, output limits, and same-sign clamping. The ice-patch bench follows `Lecture1/Step10`. The original Driveline retains its 2 kg m² inertia; the separate guide comparison uses 0 and 1 kg m².
