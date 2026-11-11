@@ -1,0 +1,4 @@
+analysis BatteryDischargeTransient
+  extends TransientAnalysis(stop = 1860, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
+  model = BatteryDischarge()
+end

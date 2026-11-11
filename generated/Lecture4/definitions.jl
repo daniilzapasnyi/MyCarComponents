@@ -206,6 +206,9 @@ component.
 end
 
 
+include("BatteryDischargeTransient_definition.jl")
+include("BatteryDischarge_definition.jl")
+include("Battery_definition.jl")
 include("ConverterDynoTransient_definition.jl")
 include("ConverterDyno_definition.jl")
 include("Converter_definition.jl")
