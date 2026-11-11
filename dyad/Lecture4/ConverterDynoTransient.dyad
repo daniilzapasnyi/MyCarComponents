@@ -1,0 +1,4 @@
+analysis ConverterDynoTransient
+  extends TransientAnalysis(stop = 102, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
+  model = ConverterDyno()
+end
