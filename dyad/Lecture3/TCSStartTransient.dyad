@@ -1,0 +1,4 @@
+analysis TCSStartTransient
+  extends TransientAnalysis(stop = 10, alg = ODEAlg.Tsit5(), dtmax = 0.001, abstol = 1e-5, reltol = 1e-5, optimize = OptimizationLevel.None())
+  model = TCSStart()
+end

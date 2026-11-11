@@ -1,0 +1,68 @@
+# Adapted from official 16ESPD HandsOn03/TCSStart.dyad (TCSStart).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component TCSStart
+  "Set to one to enable brake intervention"
+  parameter brake_enabled::Real = 1.0
+  "Set to one to enable engine intervention"
+  parameter engine_enabled::Real = 1.0
+  "Pump and accumulator supply pressure"
+  parameter supply_pressure::Pressure = 8.9e6
+  "Throttle floored from idle"
+  throttle = BlockComponents.Sources.Step(height = 1.0, offset = 0.0, start_time = 0.0) {^throttle}
+  one = BlockComponents.Sources.Constant(k = 1.0) {^one}
+  friction = BlockComponents.Sources.Constant(k = 0.2) {^friction}
+  supply = BlockComponents.Sources.Constant(k = supply_pressure) {^supply}
+  brake_enable = BlockComponents.Math.Gain(k = brake_enabled) {^brake_enable}
+  engine_reduction = BlockComponents.Math.Feedback() {^engine_reduction}
+  engine_enable = BlockComponents.Math.Gain(k = engine_enabled) {^engine_enable}
+  engine_limit = BlockComponents.Math.Feedback() {^engine_limit}
+  car = TCSCar(supply_pressure = supply_pressure) {^car}
+  brake_tcs = TCS() {^brake_tcs}
+  engine_tcs = TCSEngine() {^engine_tcs}
+relations
+  connect(throttle.y, car.pedal) {^wire1}
+  connect(friction.y, car.mu_scale) {^wire2}
+  connect(supply.y, brake_tcs.demand) {^wire3}
+  connect(car.kappa, brake_tcs.kappa, engine_tcs.kappa) {^wire4}
+  connect(brake_tcs.p_cmd, brake_enable.u) {^wire5}
+  connect(brake_enable.y, car.p_cmd) {^wire6}
+  connect(one.y, engine_reduction.u1, engine_limit.u1) {^wire7}
+  connect(engine_tcs.u_tcs, engine_reduction.u2) {^wire8}
+  connect(engine_reduction.y, engine_enable.u) {^wire9}
+  connect(engine_enable.y, engine_limit.u2) {^wire10}
+  connect(engine_limit.y, car.u_tcs) {^wire11}
+  initial car.wheel.inertia.phi = 0.0
+  initial car.wheel.inertia.w = 0.0
+  initial car.body.mass.s = 0.0
+  initial car.body.mass.v = 0.0
+  initial car.flywheel.w = 900 * pi / 30
+  initial car.flywheel.phi = 0.0
+  initial car.clutch.spline_b.phi = 0.0
+  initial car.engine.air.manifold.p = 101325.0
+metadata {
+  "_links": {
+    "throttle": {"Dyad":{"placement":{"diagram":{"x1":40,"x2":120,"y1":50,"y2":130}}}},
+    "one": {"Dyad":{"placement":{"diagram":{"x1":40,"x2":120,"y1":206,"y2":286}}}},
+    "friction": {"Dyad":{"placement":{"diagram":{"x1":40,"x2":120,"y1":880,"y2":960}}}},
+    "supply": {"Dyad":{"placement":{"diagram":{"x1":40,"x2":120,"y1":686,"y2":766}}}},
+    "brake_enable": {"Dyad":{"placement":{"diagram":{"x1":530,"x2":610,"y1":650,"y2":730}}}},
+    "engine_reduction": {"Dyad":{"placement":{"diagram":{"x1":400,"x2":480,"y1":206,"y2":286}}}},
+    "engine_enable": {"Dyad":{"placement":{"diagram":{"x1":530,"x2":610,"y1":206,"y2":286}}}},
+    "engine_limit": {"Dyad":{"placement":{"diagram":{"x1":670,"x2":750,"y1":206,"y2":286}}}},
+    "car": {"Dyad":{"placement":{"diagram":{"x1":800,"x2":980,"y1":200,"y2":400}}}},
+    "brake_tcs": {"Dyad":{"placement":{"diagram":{"x1":180,"x2":360,"y1":600,"y2":780}}}},
+    "engine_tcs": {"Dyad":{"placement":{"diagram":{"x1":180,"x2":360,"y1":340,"y2":520}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":777,"y":90},{"x":777,"y":220}],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":926,"y":920}],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[{"x":993,"y":220},{"x":993,"y":20},{"x":13,"y":20}],"E":-1},{"S":-1,"M":[],"E":3},{"S":-1,"M":[{"x":13,"y":654}],"E":2}],"junctions":[{"x":13,"y":430}]}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":760,"y":690},{"x":760,"y":350}],"E":2}]}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[],"E":2},{"S":-1,"M":[{"x":150,"y":170},{"x":650,"y":170},{"x":650,"y":246}],"E":3}],"junctions":[{"x":150,"y":246}]}},
+    "wire8": {"Dyad":{"edges":[{"S":1,"M":[{"x":365,"y":430},{"x":365,"y":286},{"x":440,"y":286}],"E":2}]}},
+    "wire9": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire10": {"Dyad":{"edges":[{"S":1,"M":[{"x":630,"y":246},{"x":630,"y":286},{"x":710,"y":286}],"E":2}]}},
+    "wire11": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}}
+  }
+}
+end
