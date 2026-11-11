@@ -1,0 +1,37 @@
+
+"Simple intake manifold model"
+component MyManifold
+
+  "Air entering through the throttle [kg/s]"
+  mdot_thr = RealInput()
+
+  "Air going into the engine cylinders [kg/s]"
+  mdot_cyl = RealInput()
+
+  "Connection to the brake booster"
+  vacuum = VehicleSystemsComponents.Vehicle.GasPort()
+
+  "Manifold pressure output [Pa]"
+  p_m = RealOutput()
+
+  "Manifold volume [m3]"
+  parameter V_m::Volume = 1.0e-3
+
+  "Air temperature [K]"
+  parameter T_m::Temperature = 298.15
+
+  "Specific gas constant for air"
+  parameter R::Real = 287.05
+
+  "Pressure inside the manifold"
+  variable p::Pressure
+
+relations
+
+  V_m / (R * T_m) * der(p) =
+    mdot_thr + vacuum.mdot - mdot_cyl
+
+  vacuum.p = p
+  p_m = p
+
+end

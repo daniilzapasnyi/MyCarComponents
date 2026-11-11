@@ -1,0 +1,36 @@
+
+"Simple test of our intake manifold"
+component ManifoldTest
+
+  "Initial air flow [kg/s]"
+  parameter flow_initial::Real = 0.001
+
+  "Extra air after one second [kg/s]"
+  parameter flow_extra::Real = 0.0001
+
+  "Air flow entering the manifold"
+  throttle = BlockComponents.Sources.Step(
+    offset = flow_initial,
+    height = flow_extra,
+    start_time = 1.0
+  )
+
+  "Air flow leaving the manifold"
+  cylinders = BlockComponents.Sources.Constant(
+    k = flow_initial
+  )
+
+  "Our own manifold model"
+  manifold = MyManifold()
+
+relations
+  connect(throttle.y, manifold.mdot_thr)
+  connect(cylinders.y, manifold.mdot_cyl)
+
+  "No air exchange with brake booster"
+  manifold.vacuum.mdot = 0
+
+  "Initial pressure: 50 kPa"
+  initial manifold.p = 50000
+
+end
