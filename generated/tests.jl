@@ -25,5 +25,8 @@ include("Driveline_test.jl")
 include("ElectricMotor_test.jl")
 include("Engine_test.jl")
 include("HybridP1_test.jl")
+include("ManifoldTest_test.jl")
+include("MyManifold_test.jl")
 end
 include("Lecture1/tests.jl")
+include("Lecture2/tests.jl")

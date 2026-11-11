@@ -1,0 +1,5 @@
+"Reproducible AirPathStep experiment; see the lecture report for validation status."
+analysis AirPathStepTransient
+  extends TransientAnalysis(stop = 2, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = AirPathStep()
+end

@@ -13,15 +13,15 @@ component ManifoldTest
     offset = flow_initial,
     height = flow_extra,
     start_time = 1.0
-  )
+  ) {^throttle}
 
   "Air flow leaving the manifold"
   cylinders = BlockComponents.Sources.Constant(
     k = flow_initial
-  )
+  ) {^cylinders}
 
   "Our own manifold model"
-  manifold = MyManifold()
+  manifold = MyManifold() {^manifold}
 
 relations
   connect(throttle.y, manifold.mdot_thr)
@@ -33,4 +33,11 @@ relations
   "Initial pressure: 50 kPa"
   initial manifold.p = 50000
 
+metadata {
+  "_links": {
+    "throttle": {"Dyad":{"placement":{"diagram":{"x1":70,"y1":200,"x2":170,"y2":300}}}},
+    "cylinders": {"Dyad":{"placement":{"diagram":{"x1":70,"y1":700,"x2":170,"y2":800}}}},
+    "manifold": {"Dyad":{"placement":{"diagram":{"x1":600,"y1":450,"x2":700,"y2":550}}}}
+  }
+}
 end
