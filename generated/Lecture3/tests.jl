@@ -16,5 +16,7 @@ end
 
 
 @testset "`MyCarComponents.Lecture3`" begin
+include("ABSStop_test.jl")
 include("PedalStop_test.jl")
+include("SlipABS_test.jl")
 end

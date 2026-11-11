@@ -1,0 +1,4 @@
+analysis ABSStopTransient
+  extends TransientAnalysis(stop = 20, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = ABSStop()
+end

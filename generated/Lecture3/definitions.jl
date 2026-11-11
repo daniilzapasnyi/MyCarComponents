@@ -206,5 +206,8 @@ component.
 end
 
 
+include("ABSStopTransient_definition.jl")
+include("ABSStop_definition.jl")
 include("PedalStopTransient_definition.jl")
 include("PedalStop_definition.jl")
+include("SlipABS_definition.jl")
