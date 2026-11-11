@@ -1,0 +1,40 @@
+kind = "interpolated map estimates; not dynamic simulations"
+lambda_3000rpm_100kPa = 0.87
+lambda_rich_pass = true
+map_max_torque_Nm = 177.017
+source = "VehicleSystemsComponents lecture-05-dyad-3.5 data/engine"
+torque_4000rpm_100kPa_Nm = 160.313
+torque_4000rpm_100kPa_pass = true
+
+[fixed_gear_130]
+BSFC_gpkWh = 286.581351678847
+CO2_gpkm = 161.77480005300106
+fuel_L100km = 7.027423385808347
+fuel_gps = 1.8905720969876065
+lambda = 1.0
+pressure_kPa = 60.76020264979742
+rpm = 4449.493032676643
+speed_kmh = 130
+torque_Nm = 50.96929996666666
+
+[fixed_gear_50]
+BSFC_gpkWh = 377.9426744224286
+CO2_gpkm = 77.09981371078148
+fuel_L100km = 3.349180674215655
+fuel_gps = 0.3465471669848143
+lambda = 1.0
+pressure_kPa = 41.86364554885978
+rpm = 1711.3434741064018
+speed_kmh = 50
+torque_Nm = 18.419299966666667
+
+[fixed_gear_90]
+BSFC_gpkWh = 305.0118107882533
+CO2_gpkm = 104.98297380733015
+fuel_L100km = 4.560412406651905
+fuel_gps = 0.8493768107389172
+lambda = 1.0
+pressure_kPa = 47.81841935418936
+rpm = 3080.4182533915223
+speed_kmh = 90
+torque_Nm = 31.0776333
