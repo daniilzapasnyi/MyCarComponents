@@ -11,4 +11,5 @@ end
 
 include("Driveline_experiment.jl")
 include("EngineStep_experiment.jl")
+include("TestBody_experiment.jl")
 include("TestDriveline_experiment.jl")

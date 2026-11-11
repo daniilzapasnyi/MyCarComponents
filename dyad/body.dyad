@@ -1,12 +1,12 @@
 "Vehicle body with aerodynamic drag and rolling resistance"
 component Body
-  flange = Flange()
-  mass = TranslationalComponents.Components.Mass(m = m)
-  drag = TranslationalComponents.Sources.QuadraticSpeedDependentForce(ForceDirection = false, v_nominal = v_nominal, f_nominal = -0.5 * rho * CdA * v_nominal ^ 2)
-  rolling = TranslationalComponents.Components.RollingResistance(fWeight = m * g)
-  cr_const = BlockComponents.Sources.Constant(k = f_r)
-  incl_const = BlockComponents.Sources.Constant(k = 0)
-  ground = TranslationalComponents.Components.Fixed()
+  flange = Flange() {^flange}
+  mass = TranslationalComponents.Components.Mass(m = m) {^mass}
+  drag = TranslationalComponents.Sources.QuadraticSpeedDependentForce(ForceDirection = false, v_nominal = v_nominal, f_nominal = -0.5 * rho * CdA * v_nominal ^ 2) {^drag}
+  rolling = TranslationalComponents.Components.RollingResistance(fWeight = m * g) {^rolling}
+  cr_const = BlockComponents.Sources.Constant(k = f_r) {^cr_const}
+  incl_const = BlockComponents.Sources.Constant(k = 0) {^incl_const}
+  ground = TranslationalComponents.Components.Fixed() {^ground}
   parameter m::Dyad.Mass = 1400
   parameter CdA::Area = 0.63
   parameter rho::Density = 1.2
@@ -14,11 +14,30 @@ component Body
   parameter g::Acceleration = 9.80665
   parameter v_nominal::Velocity = 30
 relations
-  connect(flange, mass.flange_a)
-  connect(drag.flange, mass.flange_a)
-  connect(rolling.flange, mass.flange_a)
-  connect(drag.support, ground.flange)
-  connect(rolling.support, ground.flange)
-  connect(cr_const.y, rolling.cr)
-  connect(incl_const.y, rolling.inclination)
+  connect(flange, mass.flange_a) {^wire1}
+  connect(drag.flange, mass.flange_a) {^wire2}
+  connect(rolling.flange, mass.flange_a) {^wire3}
+  connect(drag.support, ground.flange) {^wire4}
+  connect(rolling.support, ground.flange) {^wire5}
+  connect(cr_const.y, rolling.cr) {^wire6}
+  connect(incl_const.y, rolling.inclination) {^wire7}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/Body.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "flange": {"Dyad":{"placement":{"diagram":{"x1":950,"x2":1050,"y1":450,"y2":550}}}},
+    "mass": {"Dyad":{"placement":{"diagram":{"x1":660,"x2":760,"y1":250,"y2":350}}}},
+    "drag": {"Dyad":{"placement":{"diagram":{"x1":550,"x2":450,"y1":550,"y2":650}}}},
+    "rolling": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":250,"y2":350}}}},
+    "cr_const": {"Dyad":{"placement":{"diagram":{"x1":20,"x2":120,"y1":20,"y2":120}}}},
+    "incl_const": {"Dyad":{"placement":{"diagram":{"x1":-20,"x2":80,"y1":450,"y2":550}}}},
+    "ground": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":990,"y2":1090}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":410,"y":500},{"x":410,"y":300}],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":410,"y":600},{"x":410,"y":300}],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[],"E":2}],"junctions":[{"x":390,"y":300}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":200,"y":720}],"E":-1},{"S":-1,"M":[],"E":2}],"junctions":[{"x":500,"y":720}],"path":{}}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":140,"y":70},{"x":140,"y":270}],"E":2}],"path":{}}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[{"x":115,"y":500},{"x":115,"y":325}],"E":2}],"path":{}}}
+  }
+}
 end
