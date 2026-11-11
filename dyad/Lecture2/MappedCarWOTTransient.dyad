@@ -1,0 +1,5 @@
+"Reproducible MappedCarWOT experiment; see the lecture report for validation status."
+analysis MappedCarWOTTransient
+  extends TransientAnalysis(stop = 300, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = MappedCarWOT()
+end

@@ -1,0 +1,74 @@
+# Adapted from the official 16ESPD build guide / HandsOn02/MappedCar.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component MappedCar
+  "Initial CVT ratio, engine to wheel; 12 is CVTDriveline's launch setting"
+  parameter ratio_initial::Real = 12
+  "Pedal, 0 released to 1 floored"
+  pedal = RealInput() {^pedal}
+  "Vehicle speed [km/h]"
+  v_kmh = RealOutput() {^v_kmh}
+  "Manifold absolute pressure [Pa]"
+  p_m = RealOutput() {^p_m}
+  "Fuel volume flow [L/h]"
+  fuel_lph = RealOutput() {^fuel_lph}
+  engine = MapEngineFuelCut() {^engine}
+  "Crankshaft and flywheel, J as MappedEngine assumes"
+  flywheel = RotationalComponents.Components.Inertia(J = 0.15) {^flywheel}
+  "kg/s of petrol to L/h: 3600 s/h / 0.745 kg/L (Hands-on 02)"
+  to_lph = BlockComponents.Math.Gain(k = 4832.2) {^to_lph}
+  driveline = VehicleSystemsComponents.Vehicle.CVTDriveline(ratio_initial = ratio_initial) {^driveline}
+  body = MyCarComponents.Body() {^body}
+  vsensor = TranslationalComponents.Sensors.VelocitySensor() {^vsensor}
+  to_kmh = BlockComponents.Math.Gain(k = 3.6) {^to_kmh}
+  "Engine mounts and gearbox housing"
+  rot_ground = RotationalComponents.Components.Fixed() {^rot_ground}
+  "Road under the wheel"
+  trans_ground = TranslationalComponents.Components.Fixed() {^trans_ground}
+relations
+  connect(pedal, engine.pedal) {^wire1}
+  connect(pedal, driveline.pedal) {^wire2}
+  connect(engine.spline, flywheel.spline_a) {^wire3}
+  connect(flywheel.spline_b, driveline.spline) {^wire4}
+  connect(engine.support, rot_ground.spline) {^wire5}
+  connect(driveline.support_r, rot_ground.spline) {^wire6}
+  connect(driveline.flange, body.flange) {^wire7}
+  connect(driveline.support_t, trans_ground.flange) {^wire8}
+  connect(vsensor.flange, body.flange) {^wire9}
+  connect(vsensor.v, to_kmh.u) {^wire10}
+  connect(to_kmh.y, v_kmh) {^wire11}
+  connect(engine.p_m, p_m) {^wire12}
+  connect(engine.mdot_fuel, to_lph.u) {^wire13}
+  connect(to_lph.y, fuel_lph) {^wire14}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/Car.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "pedal": {"Dyad":{"placement":{"diagram":{"x1":-25,"y1":175,"x2":25,"y2":225}}}},
+    "v_kmh": {"Dyad":{"placement":{"diagram":{"x1":975,"y1":435,"x2":1025,"y2":485}}}},
+    "p_m": {"Dyad":{"placement":{"diagram":{"x1":975,"y1":245,"x2":1025,"y2":295}}}},
+    "fuel_lph": {"Dyad":{"placement":{"diagram":{"x1":975,"y1":305,"x2":1025,"y2":355}}}},
+    "engine": {"Dyad":{"placement":{"diagram":{"x1":100,"y1":352,"x2":220,"y2":472}}}},
+    "flywheel": {"Dyad":{"placement":{"diagram":{"x1":280,"y1":410,"x2":380,"y2":510}}}},
+    "to_lph": {"Dyad":{"placement":{"diagram":{"x1":800,"y1":295,"x2":870,"y2":365}}}},
+    "driveline": {"Dyad":{"placement":{"diagram":{"x1":440,"y1":410,"x2":540,"y2":510}}}},
+    "body": {"Dyad":{"placement":{"diagram":{"x1":620,"y1":410,"x2":720,"y2":510}}}},
+    "vsensor": {"Dyad":{"placement":{"diagram":{"x1":760,"y1":425,"x2":830,"y2":495}}}},
+    "to_kmh": {"Dyad":{"placement":{"diagram":{"x1":870,"y1":425,"x2":940,"y2":495}}}},
+    "rot_ground": {"Dyad":{"placement":{"diagram":{"x1":290,"y1":740,"x2":370,"y2":820}}}},
+    "trans_ground": {"Dyad":{"placement":{"diagram":{"x1":780,"y1":740,"x2":860,"y2":820}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":60,"y":200},{"x":60,"y":388}],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":420,"y":200},{"x":420,"y":430}],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":160,"y":700},{"x":330,"y":700}],"E":2}]}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":478,"y":700},{"x":330,"y":700}],"E":2}]}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[{"x":560,"y":460},{"x":560,"y":390},{"x":745,"y":390},{"x":745,"y":460}],"E":2}]}},
+    "wire8": {"Dyad":{"edges":[{"S":1,"M":[{"x":502,"y":680},{"x":820,"y":680}],"E":2}]}},
+    "wire9": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire10": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire11": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire12": {"Dyad":{"edges":[{"S":1,"M":[{"x":240,"y":364},{"x":240,"y":270}],"E":2}]}},
+    "wire13": {"Dyad":{"edges":[{"S":1,"M":[{"x":260,"y":400},{"x":260,"y":330}],"E":2}]}},
+    "wire14": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}}
+  }
+}
+end
