@@ -1,0 +1,4 @@
+analysis ABSStopWheelOnlyTransient
+  extends TransientAnalysis(stop = 20, alg = ODEAlg.Tsit5(), dtmax = 0.001, optimize = OptimizationLevel.None())
+  model = ABSStopWheelOnly()
+end
