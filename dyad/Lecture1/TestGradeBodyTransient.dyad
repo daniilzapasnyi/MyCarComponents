@@ -1,0 +1,4 @@
+analysis TestGradeBodyTransient
+  extends TransientAnalysis(stop = 10, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = TestGradeBody()
+end

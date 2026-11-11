@@ -1,0 +1,26 @@
+# Adapted from official 16ESPD HandsOn/GradeForce.dyad (TestGradeForce).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+test component TestGradeForce
+  "Flat road, then a 10 % climb from 1 s"
+  grade = BlockComponents.Sources.Step(height = 0.10, offset = 0, start_time = 1) {^grade}
+  gf = GradeForce() {^gf}
+  mass = TranslationalComponents.Components.Mass(m = 1400) {^mass}
+  fixed = TranslationalComponents.Components.Fixed() {^fixed}
+relations
+  connect(grade.y, gf.grade) {^wire1}
+  connect(gf.flange, mass.flange_a) {^wire2}
+  connect(gf.support, fixed.flange) {^wire3}
+  initial mass.s = 0
+  initial mass.v = 0
+metadata {
+  "_links": {
+    "grade": {"Dyad":{"placement":{"diagram":{"x1":100,"x2":200,"y1":450,"y2":550}}}},
+    "gf": {"Dyad":{"placement":{"diagram":{"x1":350,"x2":450,"y1":450,"y2":550}}}},
+    "mass": {"Dyad":{"placement":{"diagram":{"x1":600,"x2":700,"y1":450,"y2":550}}}},
+    "fixed": {"Dyad":{"placement":{"diagram":{"x1":350,"x2":450,"y1":700,"y2":800}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end

@@ -1,0 +1,28 @@
+# Adapted from official 16ESPD HandsOn/GradeBody.dyad (TestGradeBody).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+test component TestGradeBody
+  parameter grade_value::Real = 0.02
+  parameter v0::Velocity = 10
+  "500 N of traction, on the flat or on a climb"
+  tractive = TranslationalComponents.Sources.ConstantForce(f_constant = 500) {^tractive}
+  road = BlockComponents.Sources.Constant(k = grade_value) {^road}
+  body = GradeBody() {^body}
+  fixed = TranslationalComponents.Components.Fixed() {^fixed}
+relations
+  connect(tractive.flange, body.flange) {^wire1}
+  connect(tractive.support, fixed.flange) {^wire2}
+  connect(road.y, body.grade) {^wire3}
+  initial body.mass.s = 0
+  initial body.mass.v = v0
+metadata {
+  "_links": {
+    "tractive": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":450,"y2":550}}}},
+    "road": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":200,"y2":300}}}},
+    "body": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":450,"y2":550}}}},
+    "fixed": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":700,"y2":800}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":300,"y":500},{"x":300,"y":620},{"x":600,"y":620},{"x":600,"y":500}],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":380,"y":250},{"x":380,"y":500}],"E":2}],"path":{}}}
+  }
+}
+end

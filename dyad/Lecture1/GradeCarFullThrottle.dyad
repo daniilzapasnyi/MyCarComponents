@@ -1,0 +1,24 @@
+# Adapted from official 16ESPD HandsOn/GradeCar.dyad (GradeCarFullThrottle).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component GradeCarFullThrottle
+  "Full throttle: the engine's 150 N·m ceiling"
+  cmd = BlockComponents.Sources.Constant(k = 150) {^cmd}
+  "Road gradient"
+  road = BlockComponents.Sources.Constant(k = 0) {^road}
+  car = GradeCar() {^car}
+relations
+  connect(cmd.y, car.tau_cmd) {^wire1}
+  connect(road.y, car.grade) {^wire2}
+  initial car.body.mass.s = 0
+  initial car.body.mass.v = 0
+  initial car.engine.lag.x = 0
+metadata {
+  "_links": {
+    "cmd": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":450,"y2":550}}}},
+    "road": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":620,"y2":720}}}},
+    "car": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":400,"y":670},{"x":400,"y":545}],"E":2}],"path":{}}}
+  }
+}
+end
