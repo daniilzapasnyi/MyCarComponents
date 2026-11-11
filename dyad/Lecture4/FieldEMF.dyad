@@ -1,0 +1,46 @@
+# Adapted from official 16ESPD HandsOn04/FieldEMF.dyad (FieldEMF).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component FieldEMF
+  "Positive electrical pin"
+  p = Pin() {^p}
+  "Negative electrical pin"
+  n = Pin() {^n}
+  "Rotor spline"
+  rotor = Spline() {^rotor}
+  "Housing (support) of the emf shaft"
+  housing = Spline() {^housing}
+  "Flux as a fraction of full flux, 1 for full"
+  field = RealInput() {^field}
+  "Torque and back-EMF constant KΦ at full flux"
+  parameter k::ElectricalTorqueConstant
+  "Voltage drop between the two pins"
+  variable v::Voltage
+  "Current flowing from positive to negative pin"
+  variable i::Current
+  "Angle of the rotor with respect to the housing"
+  variable phi::Angle
+  "Angular velocity of the rotor relative to the housing"
+  variable w::AngularVelocity
+  "Torque on the rotor"
+  variable tau::Torque
+relations
+  v = p.v - n.v
+  0 = p.i + n.i
+  i = p.i
+  phi = rotor.phi - housing.phi
+  w = der(phi)
+  v = field * k * w
+  tau = -field * k * i
+  tau = rotor.tau
+  0 = housing.tau + rotor.tau
+metadata {
+  "Dyad": {"labels":[{"label":"$(instance)","x":500,"y":1200,"rot":0}],"icons":{"default":"dyad://ElectricalComponents/RotationalEMF.svg"}},
+  "_links": {
+    "p": {"Dyad":{"placement":{"diagram":{"x1":150,"y1":950,"x2":250,"y2":1050},"icon":{"x1":150,"y1":950,"x2":250,"y2":1050}}}},
+    "n": {"Dyad":{"placement":{"diagram":{"x1":350,"y1":950,"x2":450,"y2":1050},"icon":{"x1":350,"y1":950,"x2":450,"y2":1050}}}},
+    "rotor": {"Dyad":{"placement":{"diagram":{"x1":550,"y1":950,"x2":650,"y2":1050},"icon":{"x1":550,"y1":950,"x2":650,"y2":1050}}}},
+    "housing": {"Dyad":{"placement":{"diagram":{"x1":750,"y1":950,"x2":850,"y2":1050},"icon":{"x1":750,"y1":950,"x2":850,"y2":1050}}}},
+    "field": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":150,"x2":50,"y2":250},"icon":{"x1":-50,"y1":450,"x2":50,"y2":550}}}}
+  }
+}
+end

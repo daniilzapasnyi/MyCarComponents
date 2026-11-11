@@ -1,0 +1,47 @@
+# Adapted from official 16ESPD HandsOn04/DCMachineDyno.dyad (DCMachineDyno).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component DCMachineDyno
+  "Supply voltage at the terminals"
+  parameter V::Voltage = 350.0
+  "Dyno speed before the ramp [rpm]"
+  parameter rpm_start::Real = 3283.0
+  "Dyno speed after the ramp [rpm]"
+  parameter rpm_end::Real = 3600.0
+  voltage = BlockComponents.Sources.Constant(k = V) {^voltage}
+  supply = ElectricalComponents.Analog.Sources.VoltageSource() {^supply}
+  machine = DCMachine() {^machine}
+  ground = ElectricalComponents.Analog.Basic.Ground() {^ground}
+  speed = BlockComponents.Sources.Ramp(height = (rpm_end - rpm_start) * pi / 30.0, offset = rpm_start * pi / 30.0, start_time = 1.0, duration = 10.0) {^speed}
+  dyno = RotationalComponents.Sources.VelocitySource() {^dyno}
+  mounts = RotationalComponents.Components.Fixed() {^mounts}
+relations
+  initial dyno.phi = 0
+  initial machine.inductor.i = 0
+  connect(voltage.y, supply.V) {^wire1}
+  connect(supply.p, machine.p) {^wire2}
+  connect(machine.n, supply.n) {^wire3}
+  connect(supply.n, ground.g) {^wire4}
+  connect(speed.y, dyno.w_ref) {^wire5}
+  connect(machine.spline, dyno.spline) {^wire6}
+  connect(machine.support, mounts.spline) {^wire7}
+  connect(dyno.support, mounts.spline) {^wire8}
+metadata {
+  "_links": {
+    "voltage": {"Dyad":{"placement":{"diagram":{"x1":60,"y1":380,"x2":160,"y2":480}}}},
+    "supply": {"Dyad":{"placement":{"diagram":{"x1":200,"y1":500,"x2":300,"y2":600}}}},
+    "machine": {"Dyad":{"placement":{"diagram":{"x1":640,"y1":300,"x2":840,"y2":500}}}},
+    "ground": {"Dyad":{"placement":{"diagram":{"x1":260,"y1":640,"x2":340,"y2":720}}}},
+    "speed": {"Dyad":{"placement":{"diagram":{"x1":660,"y1":620,"x2":760,"y2":720}}}},
+    "dyno": {"Dyad":{"placement":{"diagram":{"x1":840,"y1":620,"x2":940,"y2":720}}}},
+    "mounts": {"Dyad":{"placement":{"diagram":{"x1":600,"y1":800,"x2":700,"y2":900}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":250,"y":430}],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":20,"y":550},{"x":20,"y":340}],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":600,"y":460},{"x":600,"y":550}],"E":2}]}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":970,"y":400},{"x":970,"y":670}],"E":2}]}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[{"x":650,"y":500}],"E":2}]}},
+    "wire8": {"Dyad":{"edges":[{"S":1,"M":[{"x":800,"y":720},{"x":800,"y":800}],"E":2}]}}
+  }
+}
+end

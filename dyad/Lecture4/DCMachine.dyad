@@ -1,0 +1,131 @@
+# Adapted from official 16ESPD HandsOn04/DCMachine.dyad (DCMachine).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component DCMachine
+  "Positive electrical pin."
+  p = Pin() {^p}
+  "Negative electrical pin."
+  n = Pin() {^n}
+  "Rotor shaft"
+  spline = Spline() {^spline}
+  "Housing"
+  support = Spline() {^support}
+  "Flux as a fraction of full flux; present only with field_weakening = true"
+  field = RealInput() if field_weakening {^field}
+  resistor = ElectricalComponents.Analog.Basic.Resistor(R = R) {^resistor}
+  inductor = ElectricalComponents.Analog.Basic.Inductor(L = L) {^inductor}
+  emf = FieldEMF(k = k) {^emf}
+  rotor = RotationalComponents.Components.Inertia(J = J) {^rotor}
+  friction = RotationalComponents.Sources.SignTorque(tau_nominal = -T_f, reg = RotationalComponents.Sources.Regularization.Linear(), w0 = w_reg) {^friction}
+  iron = RotationalComponents.Sources.SignTorque(tau_nominal = -K_i, reg = RotationalComponents.Sources.Regularization.Linear(), w0 = w_reg) {^iron}
+  windage = RotationalComponents.Sources.QuadraticSpeedDependentTorque(tau_nominal = -k_w * w_base ^ 2, w_nominal = w_base, TorqueDirection = false) {^windage}
+  constant_loss = RotationalComponents.Sources.InverseSpeedDependentTorque(tau_nominal = -C / w_reg, w_nominal = w_reg, w0 = w_reg, TorqueDirection = false) {^constant_loss}
+  "Expose the field input; off runs at full flux"
+  structural parameter field_weakening::Boolean = false
+  "Peak shaft torque, Leaf ZE1"
+  parameter T_max::Torque = 320.0
+  "Base speed, 3283 rpm"
+  parameter w_base::AngularVelocity = 3283.0 * pi / 30.0
+  "Supply voltage at which the machine reaches base speed at full torque"
+  parameter V_nom::Voltage = 350.0
+  "Armature resistance"
+  parameter R::Resistance = 0.05
+  "Armature inductance, L/R = 10 ms"
+  parameter L::Inductance = 0.5e-3
+  "Rotor inertia"
+  parameter J::Inertia = 0.05
+  "Friction torque T_f; loss T_f w"
+  parameter T_f::Torque = 0.5
+  "Iron loss coefficient K_i; loss K_i w"
+  parameter K_i::Torque = 1.0
+  "Windage coefficient k_w; loss k_w w^3, 300 W at 10100 rpm [N.m.s2]"
+  parameter k_w::Real = 300.0 / (10100.0 * pi / 30.0) ^ 3
+  "Constant loss C"
+  parameter C::Power = 200.0
+  "Speed below which the speed-independent loss torques fade to zero"
+  parameter w_reg::AngularVelocity = 10.0
+  "Torque the losses take at base speed"
+  parameter tau_loss_base::Torque = T_f + K_i + k_w * w_base ^ 2 + C / w_base
+  "Torque and back-EMF constant KΦ, from k w_base + R (T_max + tau_loss_base) / k = V_nom"
+  parameter k::ElectricalTorqueConstant = (V_nom + sqrt(V_nom ^ 2 - 4.0 * w_base * R * (T_max + tau_loss_base))) / (2.0 * w_base)
+  "Voltage across the component (between pin p and pin n)."
+  variable v::Voltage
+  "Armature current, into p"
+  variable i::Current
+  "Back-EMF, E = k w"
+  variable E::Voltage
+  "Electromagnetic torque, tau_em = k i"
+  variable tau_em::Torque
+  "Shaft speed relative to the housing"
+  variable w::AngularVelocity
+  "Torque delivered at the shaft"
+  variable tau::Torque
+  "Electrical power into the terminals"
+  variable P_elec::Power
+  "Mechanical power out of the shaft"
+  variable P_mech::Power
+  "Copper loss, R i^2"
+  variable P_cu::Power
+  "Friction loss"
+  variable P_fric::Power
+  "Iron loss"
+  variable P_iron::Power
+  "Windage loss"
+  variable P_wind::Power
+  "Constant loss"
+  variable P_const::Power
+  "Sum of the losses"
+  variable P_loss::Power
+relations
+  v = p.v - n.v
+  connect(p, resistor.p) {^wire1}
+  connect(resistor.n, inductor.p) {^wire2}
+  connect(inductor.n, emf.p) {^wire3}
+  connect(emf.n, n) {^wire4}
+  connect(emf.rotor, rotor.spline_a, friction.spline, iron.spline, windage.spline, constant_loss.spline) {^wire5}
+  connect(rotor.spline_b, spline) {^wire6}
+  connect(emf.housing, friction.support, iron.support, windage.support, constant_loss.support, support) {^wire7}
+  if field_weakening
+    connect(field, emf.field) {^wire8}
+  else
+    emf.field = 1.0
+  end
+  i = p.i
+  E = emf.v
+  tau_em = -emf.tau
+  w = emf.w
+  tau = -spline.tau
+  P_elec = v * i
+  P_mech = tau * w
+  P_cu = resistor.v * resistor.i
+  P_fric = -friction.tau * w
+  P_iron = -iron.tau * w
+  P_wind = -windage.tau * w
+  P_const = -constant_loss.tau * w
+  P_loss = P_cu + P_fric + P_iron + P_wind + P_const
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/Vehicle/Electric/DCMachine.svg"},"labels":[{"label":"$(instance)","x":500,"y":1150,"rot":0}]},
+  "_links": {
+    "p": {"Dyad":{"placement":{"icon":{"iconName":"pos","x1":-50,"y1":150,"x2":50,"y2":250},"diagram":{"iconName":"pos","x1":-50,"y1":150,"x2":50,"y2":250}}}},
+    "n": {"Dyad":{"placement":{"icon":{"iconName":"neg","x1":-50,"y1":750,"x2":50,"y2":850},"diagram":{"iconName":"neg","x1":-50,"y1":750,"x2":50,"y2":850}}}},
+    "spline": {"Dyad":{"placement":{"icon":{"x1":950,"y1":450,"x2":1050,"y2":550},"diagram":{"x1":950,"y1":400,"x2":1050,"y2":500}}}},
+    "support": {"Dyad":{"placement":{"icon":{"iconName":"support","x1":450,"y1":950,"x2":550,"y2":1050},"diagram":{"iconName":"support","x1":450,"y1":950,"x2":550,"y2":1050}}}},
+    "field": {"Dyad":{"placement":{"icon":{"x1":-50,"y1":450,"x2":50,"y2":550},"diagram":{"x1":-50,"y1":450,"x2":50,"y2":550}}}},
+    "resistor": {"Dyad":{"placement":{"diagram":{"x1":100,"y1":150,"x2":200,"y2":250}}}},
+    "inductor": {"Dyad":{"placement":{"diagram":{"x1":250,"y1":150,"x2":350,"y2":250}}}},
+    "emf": {"Dyad":{"placement":{"diagram":{"x1":450,"y1":400,"x2":550,"y2":500}}}},
+    "rotor": {"Dyad":{"placement":{"diagram":{"x1":700,"y1":400,"x2":800,"y2":500}}}},
+    "friction": {"Dyad":{"placement":{"diagram":{"x1":150,"y1":700,"x2":250,"y2":800}}}},
+    "iron": {"Dyad":{"placement":{"diagram":{"x1":350,"y1":700,"x2":450,"y2":800}}}},
+    "windage": {"Dyad":{"placement":{"diagram":{"x1":550,"y1":700,"x2":650,"y2":800}}}},
+    "constant_loss": {"Dyad":{"placement":{"diagram":{"x1":750,"y1":700,"x2":850,"y2":800}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":500,"y":200}],"E":2}]}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[{"x":470,"y":500},{"x":470,"y":560},{"x":60,"y":560},{"x":60,"y":800}],"E":2}]}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[],"E":2},{"S":-1,"M":[],"E":-2},{"S":-2,"M":[],"E":-3},{"S":-2,"M":[],"E":-4},{"S":-3,"M":[{"x":490,"y":750}],"E":4},{"S":-3,"M":[{"x":290,"y":630},{"x":290,"y":750}],"E":3},{"S":-4,"M":[{"x":690,"y":750}],"E":5},{"S":-4,"M":[{"x":890,"y":630},{"x":890,"y":750}],"E":6}],"junctions":[{"x":620,"y":450},{"x":620,"y":630},{"x":490,"y":630},{"x":690,"y":630}]}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}]}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[{"x":120,"y":450}],"E":-1},{"S":2,"M":[],"E":-1},{"S":-1,"M":[{"x":120,"y":880}],"E":-2},{"S":3,"M":[{"x":360,"y":800}],"E":-2},{"S":-2,"M":[],"E":-3},{"S":-3,"M":[],"E":6},{"S":-3,"M":[],"E":-4},{"S":4,"M":[{"x":545,"y":800}],"E":-4},{"S":5,"M":[{"x":720,"y":800},{"x":720,"y":880}],"E":-4}],"junctions":[{"x":120,"y":800},{"x":360,"y":880},{"x":500,"y":880},{"x":545,"y":880}]}},
+    "wire8": {"Dyad":{"edges":[{"S":1,"M":[{"x":80,"y":500},{"x":80,"y":320},{"x":470,"y":320}],"E":2}]}}
+  }
+}
+end

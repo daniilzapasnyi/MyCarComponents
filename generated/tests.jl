@@ -26,3 +26,4 @@ include("ElectricMotor_test.jl")
 include("Engine_test.jl")
 include("HybridP1_test.jl")
 end
+include("Lecture4/tests.jl")
