@@ -9,6 +9,8 @@ if isfile(joinpath((@__DIR__) |> Base.dirname |> Base.dirname, "dyad", "Lecture1
 end
 
 
+include("CarFullThrottle_experiment.jl")
+include("Car_experiment.jl")
 include("Driveline_experiment.jl")
 include("EngineStep_experiment.jl")
 include("TestBody_experiment.jl")

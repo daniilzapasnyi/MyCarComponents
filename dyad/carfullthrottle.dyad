@@ -2,13 +2,20 @@
 "Full throttle acceleration test"
 
 component CarFullThrottle
-  cmd = BlockComponents.Sources.Constant(k = 150)
-  car = Car()
+  cmd = BlockComponents.Sources.Constant(k = 150) {^cmd}
+  car = Car() {^car}
 
 relations
-  connect(cmd.y, car.tau_cmd)
+  connect(cmd.y, car.tau_cmd) {^wire1}
 
   initial car.body.mass.s = 0
   initial car.body.mass.v = 0
   initial car.engine.lag.x = 0
+metadata {
+  "_links": {
+    "cmd": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":450,"y2":550}}}},
+    "car": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
 end
