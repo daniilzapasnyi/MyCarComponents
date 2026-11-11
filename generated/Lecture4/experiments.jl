@@ -9,6 +9,9 @@ if isfile(joinpath((@__DIR__) |> Base.dirname |> Base.dirname, "dyad", "Lecture4
 end
 
 
+include("BEVHardStop_experiment.jl")
+include("BEVLowGripStop_experiment.jl")
+include("BEVRegenWLTC_experiment.jl")
 include("BEVWLTC_experiment.jl")
 include("BatteryDischarge_experiment.jl")
 include("Battery_experiment.jl")
@@ -18,3 +21,4 @@ include("DCMachineDyno_experiment.jl")
 include("DCMachine_experiment.jl")
 include("ElectricDrive_experiment.jl")
 include("FieldEMF_experiment.jl")
+include("RegenBlend_experiment.jl")

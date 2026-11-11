@@ -206,6 +206,12 @@ component.
 end
 
 
+include("BEVHardStopTransient_definition.jl")
+include("BEVHardStop_definition.jl")
+include("BEVLowGripStopTransient_definition.jl")
+include("BEVLowGripStop_definition.jl")
+include("BEVRegenWLTCTransient_definition.jl")
+include("BEVRegenWLTC_definition.jl")
 include("BEVWLTCTransient_definition.jl")
 include("BEVWLTC_definition.jl")
 include("BatteryDischargeTransient_definition.jl")
@@ -219,3 +225,4 @@ include("DCMachineDyno_definition.jl")
 include("DCMachine_definition.jl")
 include("ElectricDrive_definition.jl")
 include("FieldEMF_definition.jl")
+include("RegenBlend_definition.jl")
