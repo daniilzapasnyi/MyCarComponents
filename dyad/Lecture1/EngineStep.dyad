@@ -1,0 +1,27 @@
+# Adapted from official 16ESPD HandsOn/Engine.dyad (EngineStep).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component EngineStep
+  cmd = BlockComponents.Sources.Step(height = 200, offset = 0, start_time = 0.5) {^cmd}
+  engine = MyCarComponents.Engine() {^engine}
+  "Unit inertia, so its angular acceleration reads as the delivered torque"
+  load = RotationalComponents.Components.Inertia(J = 1) {^load}
+  mounts = RotationalComponents.Components.Fixed() {^mounts}
+relations
+  connect(cmd.y, engine.tau_cmd) {^wire1}
+  connect(engine.spline, load.spline_a) {^wire2}
+  connect(engine.support, mounts.spline) {^wire3}
+  initial engine.lag.x = 0
+  initial load.phi = 0
+  initial load.w = 0
+metadata {
+  "_links": {
+    "cmd": {"Dyad":{"placement":{"diagram":{"x1":100,"x2":200,"y1":450,"y2":550}}}},
+    "engine": {"Dyad":{"placement":{"diagram":{"x1":350,"x2":450,"y1":450,"y2":550}}}},
+    "load": {"Dyad":{"placement":{"diagram":{"x1":600,"x2":700,"y1":450,"y2":550}}}},
+    "mounts": {"Dyad":{"placement":{"diagram":{"x1":350,"x2":450,"y1":700,"y2":800}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end

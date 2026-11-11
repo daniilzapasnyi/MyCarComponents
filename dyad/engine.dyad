@@ -2,31 +2,49 @@
 "Engine model with torque delay and response"
 
 component Engine
-  tau_cmd = RealInput()
-  spline = Spline()
-  support = Spline()
+  tau_cmd = RealInput() {^tau_cmd}
+  spline = Spline() {^spline}
+  support = Spline() {^support}
 
   delay = BlockComponents.Nonlinear.PadeDelay(
     n = 6, m = 5, delayTime = theta_e
-  )
+  ) {^delay}
 
-  lag = BlockComponents.Continuous.FirstOrder(T = tau_e)
+  lag = BlockComponents.Continuous.FirstOrder(T = tau_e) {^lag}
 
   limiter = BlockComponents.Nonlinear.Limiter(
     y_max = T_max, y_min = 0
-  )
+  ) {^limiter}
 
-  torque = RotationalComponents.Sources.TorqueSource()
+  torque = RotationalComponents.Sources.TorqueSource() {^torque}
 
   structural parameter theta_e::Time = 0.3
   parameter tau_e::Time = 0.3
   parameter T_max::Torque = 150
 
 relations
-  connect(tau_cmd, delay.u)
-  connect(delay.y, lag.u)
-  connect(lag.y, limiter.u)
-  connect(limiter.y, torque.tau)
-  connect(torque.spline, spline)
-  connect(torque.support, support)
+  connect(tau_cmd, delay.u) {^wire1}
+  connect(delay.y, lag.u) {^wire2}
+  connect(lag.y, limiter.u) {^wire3}
+  connect(limiter.y, torque.tau) {^wire4}
+  connect(torque.spline, spline) {^wire5}
+  connect(torque.support, support) {^wire6}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/Engine.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "tau_cmd": {"Dyad":{"placement":{"icon":{"x1":-60,"x2":40,"y1":450,"y2":550},"diagram":{"x1":-60,"x2":40,"y1":450,"y2":550}}}},
+    "spline": {"Dyad":{"placement":{"icon":{"x1":950,"x2":1050,"y1":450,"y2":550},"diagram":{"x1":950,"x2":1050,"y1":450,"y2":550}}}},
+    "support": {"Dyad":{"placement":{"icon":{"x1":450,"x2":550,"y1":950,"y2":1050},"diagram":{"x1":450,"x2":550,"y1":950,"y2":1050}}}},
+    "delay": {"Dyad":{"placement":{"diagram":{"x1":110,"x2":210,"y1":450,"y2":550}}}},
+    "lag": {"Dyad":{"placement":{"diagram":{"x1":300,"x2":400,"y1":450,"y2":550}}}},
+    "limiter": {"Dyad":{"placement":{"diagram":{"x1":490,"x2":590,"y1":450,"y2":550}}}},
+    "torque": {"Dyad":{"placement":{"diagram":{"x1":680,"x2":780,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":730,"y":900},{"x":500,"y":900}],"E":2}],"path":{}}}
+  }
+}
 end
