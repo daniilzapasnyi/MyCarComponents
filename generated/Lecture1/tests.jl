@@ -22,4 +22,8 @@ include("Driveline_test.jl")
 include("EngineStep_test.jl")
 include("TestBody_test.jl")
 include("TestDriveline_test.jl")
+include("TestWheeledDriveline_test.jl")
+include("WheeledCarFullThrottle_test.jl")
+include("WheeledCar_test.jl")
+include("WheeledDriveline_test.jl")
 end

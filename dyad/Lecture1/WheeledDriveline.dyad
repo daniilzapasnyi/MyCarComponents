@@ -1,0 +1,49 @@
+# Adapted from official 16ESPD HandsOn/WheeledDriveline.dyad (WheeledDriveline).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component WheeledDriveline
+  "From the engine"
+  spline = Spline() {^spline}
+  "Gearbox housing"
+  support_r = Spline() {^support_r}
+  "To the body"
+  flange = Flange() {^flange}
+  "Road"
+  support_t = Flange() {^support_t}
+  gear = RotationalComponents.Components.IdealGear(ratio = i) {^gear}
+  "Road wheel and tire, about 20 kg mostly between 0.2 and 0.3 m radius"
+  inertia = RotationalComponents.Components.Inertia(J = J_w) {^inertia}
+  wheel = RotationalComponents.Components.IdealRollingWheel(radius = r) {^wheel}
+  "Gear ratio"
+  parameter i::Real = 4.0
+  "Road wheel and tire inertia"
+  parameter J_w::MomentOfInertia = 1.0
+  "Wheel rolling radius"
+  parameter r::Length = 0.31
+relations
+  connect(spline, gear.spline_a) {^wire1}
+  connect(gear.spline_b, inertia.spline_a) {^wire2}
+  connect(inertia.spline_b, wheel.spline) {^wire3}
+  connect(wheel.flange, flange) {^wire4}
+  connect(gear.support, support_r) {^wire5}
+  connect(wheel.support_r, support_r) {^wire6}
+  connect(wheel.support_t, support_t) {^wire7}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/WheeledDriveline.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "spline": {"Dyad":{"placement":{"diagram":{"x1":-40,"x2":60,"y1":450,"y2":550}}}},
+    "support_r": {"Dyad":{"placement":{"diagram":{"x1":330,"x2":430,"y1":950,"y2":1050}}}},
+    "flange": {"Dyad":{"placement":{"diagram":{"x1":950,"x2":1050,"y1":450,"y2":550}}}},
+    "support_t": {"Dyad":{"placement":{"diagram":{"x1":560,"x2":660,"y1":950,"y2":1050}}}},
+    "gear": {"Dyad":{"placement":{"diagram":{"x1":200,"x2":300,"y1":450,"y2":550}}}},
+    "inertia": {"Dyad":{"placement":{"diagram":{"x1":380,"x2":480,"y1":450,"y2":550}}}},
+    "wheel": {"Dyad":{"placement":{"diagram":{"x1":560,"x2":660,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":250,"y":900},{"x":380,"y":900}],"E":2}],"path":{}}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[{"x":575,"y":650},{"x":380,"y":650}],"E":2}],"path":{}}},
+    "wire7": {"Dyad":{"edges":[{"S":1,"M":[{"x":645,"y":800},{"x":610,"y":800}],"E":2}],"path":{}}}
+  }
+}
+end
