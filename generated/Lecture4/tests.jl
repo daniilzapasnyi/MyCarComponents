@@ -16,6 +16,7 @@ end
 
 
 @testset "`MyCarComponents.Lecture4`" begin
+include("BEVEnergyBill_test.jl")
 include("BEVHardStop_test.jl")
 include("BEVLowGripStop_test.jl")
 include("BEVRegenWLTC_test.jl")

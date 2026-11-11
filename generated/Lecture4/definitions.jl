@@ -206,6 +206,8 @@ component.
 end
 
 
+include("BEVEnergyBillTransient_definition.jl")
+include("BEVEnergyBill_definition.jl")
 include("BEVHardStopTransient_definition.jl")
 include("BEVHardStop_definition.jl")
 include("BEVLowGripStopTransient_definition.jl")
