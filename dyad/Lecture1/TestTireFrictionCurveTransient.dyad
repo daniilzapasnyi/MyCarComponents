@@ -1,0 +1,4 @@
+analysis TestTireFrictionCurveTransient
+  extends TransientAnalysis(stop = 2, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = TestTireFrictionCurve()
+end
