@@ -1,0 +1,42 @@
+# Adapted from the official 16ESPD build guide / HandsOn/Driveline.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component Driveline
+  "From the engine"
+  spline = Spline() {^spline}
+  "Gearbox housing"
+  support_r = Spline() {^support_r}
+  "To the body"
+  flange = Flange() {^flange}
+  "Road"
+  support_t = Flange() {^support_t}
+  gear = RotationalComponents.Components.IdealGear(ratio = i) {^gear}
+  wheel = RotationalComponents.Components.IdealRollingWheel(radius = r) {^wheel}
+  "Gear ratio"
+  parameter i::Real = 4.0
+  "Wheel rolling radius"
+  parameter r::Length = 0.31
+relations
+  connect(spline, gear.spline_a) {^wire1}
+  connect(gear.spline_b, wheel.spline) {^wire2}
+  connect(wheel.flange, flange) {^wire3}
+  connect(gear.support, support_r) {^wire4}
+  connect(wheel.support_r, support_r) {^wire5}
+  connect(wheel.support_t, support_t) {^wire6}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/Driveline.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "spline": {"Dyad":{"placement":{"icon":{"x1":-40,"x2":60,"y1":450,"y2":550},"diagram":{"x1":-40,"x2":60,"y1":450,"y2":550}}}},
+    "support_r": {"Dyad":{"placement":{"icon":{"x1":330,"x2":430,"y1":950,"y2":1050},"diagram":{"x1":330,"x2":430,"y1":950,"y2":1050}}}},
+    "flange": {"Dyad":{"placement":{"icon":{"x1":950,"x2":1050,"y1":450,"y2":550},"diagram":{"x1":950,"x2":1050,"y1":450,"y2":550}}}},
+    "support_t": {"Dyad":{"placement":{"icon":{"x1":560,"x2":660,"y1":950,"y2":1050},"diagram":{"x1":555,"x2":655,"y1":950,"y2":1050}}}},
+    "gear": {"Dyad":{"placement":{"diagram":{"x1":330,"x2":430,"y1":450,"y2":550}}}},
+    "wheel": {"Dyad":{"placement":{"diagram":{"x1":520,"x2":620,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":535,"y":590},{"x":380,"y":590}],"E":2}],"path":{}}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end

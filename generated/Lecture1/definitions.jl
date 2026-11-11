@@ -206,5 +206,8 @@ component.
 end
 
 
+include("Driveline_definition.jl")
 include("EngineStepTransient_definition.jl")
 include("EngineStep_definition.jl")
+include("TestDrivelineTransient_definition.jl")
+include("TestDriveline_definition.jl")

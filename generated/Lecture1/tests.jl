@@ -16,5 +16,7 @@ end
 
 
 @testset "`MyCarComponents.Lecture1`" begin
+include("Driveline_test.jl")
 include("EngineStep_test.jl")
+include("TestDriveline_test.jl")
 end

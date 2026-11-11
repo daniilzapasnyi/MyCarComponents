@@ -1,0 +1,32 @@
+# Adapted from official 16ESPD HandsOn/Driveline.dyad (TestDriveline).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+test component TestDriveline
+  "Constant engine-side torque"
+  torque = RotationalComponents.Sources.ConstantTorque(tau_constant = 100) {^torque}
+  driveline = Driveline() {^driveline}
+  housing = RotationalComponents.Components.Fixed() {^housing}
+  mass = TranslationalComponents.Components.Mass(m = 1400) {^mass}
+  road = TranslationalComponents.Components.Fixed() {^road}
+relations
+  connect(torque.spline, driveline.spline) {^wire1}
+  connect(torque.support, housing.spline) {^wire2}
+  connect(driveline.support_r, housing.spline) {^wire3}
+  connect(driveline.flange, mass.flange_a) {^wire4}
+  connect(driveline.support_t, road.flange) {^wire5}
+  initial mass.s = 0
+  initial mass.v = 0
+metadata {
+  "_links": {
+    "torque": {"Dyad":{"placement":{"diagram":{"x1":100,"x2":200,"y1":450,"y2":550}}}},
+    "driveline": {"Dyad":{"placement":{"diagram":{"x1":350,"x2":450,"y1":450,"y2":550}}}},
+    "housing": {"Dyad":{"placement":{"diagram":{"x1":100,"x2":200,"y1":700,"y2":800}}}},
+    "mass": {"Dyad":{"placement":{"diagram":{"x1":600,"x2":700,"y1":450,"y2":550}}}},
+    "road": {"Dyad":{"placement":{"diagram":{"x1":361,"x2":461,"y1":700,"y2":800}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":388,"y":650},{"x":150,"y":650}],"E":2}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end
