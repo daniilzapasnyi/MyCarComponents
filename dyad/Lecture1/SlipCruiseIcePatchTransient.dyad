@@ -1,0 +1,5 @@
+"Reproducible SlipCruiseIcePatch experiment; see the lecture report for validation status."
+analysis SlipCruiseIcePatchTransient
+  extends TransientAnalysis(stop = 45, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = SlipCruiseIcePatch()
+end

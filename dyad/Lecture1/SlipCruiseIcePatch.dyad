@@ -1,0 +1,34 @@
+# Adapted from the official 16ESPD build guide / Lecture1/Step10/SlipCruiseIcePatch.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component SlipCruiseIcePatch
+  demand = BlockComponents.Sources.Constant(k = 90) {^demand}
+  controller = CruiseController(y_max = 150, y_min = 0, xi0 = 31.078 / 56) {^controller}
+  plant = SlipCar() {^plant}
+  road = BlockComponents.Sources.Constant(k = 0) {^road}
+  friction = BlockComponents.Sources.Pulse(amplitude = 0.05, offset = 1.0, start_time = 4, duty_cycle = 1.0, period = 8) {^friction}
+relations
+  connect(demand.y, controller.u_s) {^wire1}
+  connect(plant.v_kmh, controller.u_m) {^wire2}
+  connect(controller.y, plant.tau_cmd) {^wire3}
+  connect(road.y, plant.grade) {^wire4}
+  connect(friction.y, plant.mu_scale) {^wire5}
+  initial plant.body.mass.s = 0
+  initial plant.body.mass.v = 25
+  initial plant.engine.lag.x = 31.078
+  initial plant.wheel_inertia.phi = 0
+  initial plant.wheel_inertia.w = 25 / plant.r
+metadata {
+  "_links": {
+    "demand": {"Dyad":{"placement":{"diagram":{"x1":100,"x2":200,"y1":450,"y2":550}}}},
+    "controller": {"Dyad":{"placement":{"diagram":{"x1":350,"x2":450,"y1":450,"y2":550}}}},
+    "plant": {"Dyad":{"placement":{"diagram":{"x1":650,"x2":750,"y1":400,"y2":500}}}},
+    "road": {"Dyad":{"placement":{"diagram":{"x1":480,"x2":580,"y1":150,"y2":250}}}},
+    "friction": {"Dyad":{"placement":{"diagram":{"x1":480,"x2":580,"y1":300,"y2":400}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":800,"y":465},{"x":800,"y":850},{"x":400,"y":850}],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[{"x":550,"y":500},{"x":550,"y":485}],"E":2}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[{"x":620,"y":200},{"x":620,"y":407}],"E":2}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[{"x":600,"y":350},{"x":600,"y":422}],"E":2}],"path":{}}}
+  }
+}
+end

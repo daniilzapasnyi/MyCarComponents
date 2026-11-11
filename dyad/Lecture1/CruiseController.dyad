@@ -1,0 +1,52 @@
+"P, PI or filtered PID in km/h and N.m, with optional clamping anti-windup."
+component CruiseController
+  u_s = RealInput() {^u_s}
+  u_m = RealInput() {^u_m}
+  y = RealOutput() {^y}
+  parameter with_I::Boolean = true
+  parameter with_D::Boolean = true
+  parameter anti_windup::Boolean = true
+  parameter k::Real = 56
+  parameter Ti::Time = 10
+  parameter Td::Time = 0.5
+  parameter Nd::Real = 10
+  parameter wd::Real = 0
+  parameter xi0::Real = 0
+  parameter xd0::Real = -90
+  parameter y_max::Real = 150
+  parameter y_min::Real = 0
+  error = BlockComponents.Math.Add(k1 = 1, k2 = -1) {^error}
+  add_d = BlockComponents.Math.Add(k1 = wd, k2 = -1) {^add_d}
+  derivative = BlockComponents.Continuous.Derivative(k = Td, T = ifelse(with_D, Td / Nd, 1), x0 = xd0) {^derivative}
+  integrator = BlockComponents.Continuous.Integrator(k = 1 / Ti, x0 = xi0) {^integrator}
+  add_pid = BlockComponents.Math.Add3() {^add_pid}
+  gain = BlockComponents.Math.Gain(k = k) {^gain}
+  limiter = BlockComponents.Nonlinear.Limiter(y_max = y_max, y_min = y_min) {^limiter}
+  variable excess::Real
+relations
+  connect(u_s, error.u1, add_d.u1)
+  connect(u_m, error.u2, add_d.u2)
+  connect(add_d.y, derivative.u)
+  connect(error.y, add_pid.u1)
+  add_pid.u2 = ifelse(with_D, derivative.y, 0)
+  add_pid.u3 = ifelse(with_I, integrator.y, 0)
+  connect(add_pid.y, gain.u)
+  connect(gain.y, limiter.u)
+  connect(limiter.y, y)
+  excess = gain.y - limiter.y
+  integrator.u = ifelse(with_I and ifelse(anti_windup, excess * error.y <= 0, true), error.y, 0)
+metadata {
+  "_links": {
+    "u_s": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":200,"x2":50,"y2":300},"icon":{"x1":-50,"y1":200,"x2":50,"y2":300}}}},
+    "u_m": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":700,"x2":50,"y2":800},"icon":{"x1":-50,"y1":450,"x2":50,"y2":550}}}},
+    "y": {"Dyad":{"placement":{"diagram":{"x1":1100,"y1":250,"x2":1200,"y2":350},"icon":{"x1":950,"y1":200,"x2":1050,"y2":300}}}},
+    "error": {"Dyad":{"placement":{"diagram":{"x1":150,"y1":250,"x2":250,"y2":350}}}},
+    "add_d": {"Dyad":{"placement":{"diagram":{"x1":150,"y1":650,"x2":250,"y2":750}}}},
+    "derivative": {"Dyad":{"placement":{"diagram":{"x1":370,"y1":650,"x2":470,"y2":750}}}},
+    "integrator": {"Dyad":{"placement":{"diagram":{"x1":370,"y1":50,"x2":470,"y2":150}}}},
+    "add_pid": {"Dyad":{"placement":{"diagram":{"x1":600,"y1":250,"x2":700,"y2":350}}}},
+    "gain": {"Dyad":{"placement":{"diagram":{"x1":770,"y1":250,"x2":870,"y2":350}}}},
+    "limiter": {"Dyad":{"placement":{"diagram":{"x1":940,"y1":250,"x2":1040,"y2":350}}}}
+  }
+}
+end

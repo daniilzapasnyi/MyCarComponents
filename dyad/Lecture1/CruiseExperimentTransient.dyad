@@ -1,0 +1,5 @@
+"Reproducible CruiseExperiment experiment; see the lecture report for validation status."
+analysis CruiseExperimentTransient
+  extends TransientAnalysis(stop = 400, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = CruiseExperiment()
+end
