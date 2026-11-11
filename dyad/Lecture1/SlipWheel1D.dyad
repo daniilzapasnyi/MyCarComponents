@@ -1,0 +1,48 @@
+# Adapted from the official 16ESPD build guide / HandsOn/SlipWheel1D.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component SlipWheel1D
+  "Wheel shaft"
+  spline = Spline() {^spline}
+  "Contact with the body"
+  flange = Flange() {^flange}
+  "Road-friction multiplier"
+  mu_scale = RealInput() {^mu_scale}
+  curve = TireFrictionCurve() {^curve}
+  "Wheel rolling radius"
+  parameter radius::Length = 0.31
+  "Normal load on the driven axle"
+  parameter F_z::Force = 6864.655
+  "Speed below which slip is measured against v_eps instead of v"
+  parameter v_eps::Velocity = 0.5
+  "Wheel angular speed"
+  variable omega::AngularVelocity
+  "Vehicle speed"
+  variable v::Velocity
+  "Longitudinal slip ratio"
+  variable kappa::Real
+  "Friction coefficient after road scaling"
+  variable mu::Real
+  "Longitudinal tire force"
+  variable F_x::Force
+relations
+  omega = der(spline.phi)
+  v = der(flange.s)
+  # At standstill v = 0 and the slip ratio is undefined; the floor keeps it finite.
+  kappa = (omega * radius - v) / max(abs(v), v_eps)
+  curve.kappa = kappa
+  mu = mu_scale * curve.mu
+  F_x = mu * F_z
+  # Flow is positive into the component: the tire pushes the body forward with F_x, so the
+  # flange reports -F_x, and the shaft feels the matching reaction torque.
+  flange.f = -F_x
+  0 = spline.tau + radius * flange.f
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/SlipWheel1D.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "spline": {"Dyad":{"placement":{"diagram":{"x1":-50,"x2":50,"y1":450,"y2":550}}}},
+    "flange": {"Dyad":{"placement":{"diagram":{"x1":950,"x2":1050,"y1":450,"y2":550}}}},
+    "mu_scale": {"Dyad":{"placement":{"diagram":{"x1":460,"x2":560,"y1":-50,"y2":50,"rot":90}}}},
+    "curve": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":450,"y2":550}}}}
+  }
+}
+end

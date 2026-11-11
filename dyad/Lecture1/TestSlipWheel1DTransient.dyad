@@ -1,0 +1,4 @@
+analysis TestSlipWheel1DTransient
+  extends TransientAnalysis(stop = 5, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = TestSlipWheel1D()
+end
