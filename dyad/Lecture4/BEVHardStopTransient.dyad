@@ -1,4 +1,6 @@
 analysis BEVHardStopTransient
   extends TransientAnalysis(stop = 6, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
-  model = BEVHardStop()
+  parameter P_charge::Power = 80.5e3
+  parameter withdraw::Real = 1.0
+  model = BEVHardStop(P_charge = P_charge, withdraw = withdraw)
 end

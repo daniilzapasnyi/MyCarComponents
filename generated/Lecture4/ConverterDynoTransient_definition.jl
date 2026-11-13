@@ -6,7 +6,7 @@
 
 using DyadInterface
 using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
-@component function ConverterDynoTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=102, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=1.0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", __overrides = Dict{String, Any}())
+@component function ConverterDynoTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=102, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=1.0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", var"V"=350.0, var"I_ref"=500.0, var"rpm_start"=0.0, var"rpm_end"=10000.0, __overrides = Dict{String, Any}())
   isnothing(name) && throw(ArgumentError("""
     The `name` keyword must be provided. Please consider using the `@named` macro,
     like so:
@@ -40,6 +40,10 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   haskey(__overrides, "specialization") && (specialization = pop!(__overrides, "specialization"))
   haskey(__overrides, "verbose") && (verbose = pop!(__overrides, "verbose"))
   haskey(__overrides, "log_file") && (log_file = pop!(__overrides, "log_file"))
+  haskey(__overrides, "V") && (V = pop!(__overrides, "V"))
+  haskey(__overrides, "I_ref") && (I_ref = pop!(__overrides, "I_ref"))
+  haskey(__overrides, "rpm_start") && (rpm_start = pop!(__overrides, "rpm_start"))
+  haskey(__overrides, "rpm_end") && (rpm_end = pop!(__overrides, "rpm_end"))
 
   ### Structural Parameters (functions)
 
@@ -99,6 +103,18 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   __local__log_file = log_file
   append!(__params, @parameters (log_file::String))
   __dyad_seed_parameter!(__initial_conditions, __bindings, log_file, __local__log_file)
+  __local__V = V
+  append!(__params, @parameters (V::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, V, __local__V)
+  __local__I_ref = I_ref
+  append!(__params, @parameters (I_ref::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, I_ref, __local__I_ref)
+  __local__rpm_start = rpm_start
+  append!(__params, @parameters (rpm_start::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, rpm_start, __local__rpm_start)
+  __local__rpm_end = rpm_end
+  append!(__params, @parameters (rpm_end::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, rpm_end, __local__rpm_end)
 
   ### Final Parameters (assignments)
 
@@ -114,7 +130,7 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   ### Components
   # Subcomponent model of type MyCarComponents.Lecture4.ConverterDyno
   model_overrides = __pop_subcomponent_overrides!(__overrides, "model")
-  push!(__systems, @named model = MyCarComponents.Lecture4.ConverterDyno(; __overrides = model_overrides))
+  push!(__systems, @named model = MyCarComponents.Lecture4.ConverterDyno(; V=V, I_ref=I_ref, rpm_start=rpm_start, rpm_end=rpm_end, __overrides = model_overrides))
 
   ### Check there are no unmatched overrides
   isempty(__overrides) || throw(ArgumentError("overrides: [$(join(keys(__overrides), ", "))] don't match names found in model. These names may exist in the model but could have been conditionally excluded. Override keys are dotted paths as written in Dyad source (e.g. inner.rate)."))
@@ -151,14 +167,21 @@ export ConverterDynoTransient__System
   var"specialization"::SpecializationLevel.Type = SpecializationLevel.Despecialize()
   var"verbose"::DEVerbosity.Type = DEVerbosity.Standard()
   var"log_file"::String = ""
+  var"V"::Float64 = 350.0
+  var"I_ref"::Float64 = 500.0
+  var"rpm_start"::Float64 = 0.0
+  var"rpm_end"::Float64 = 10000.0
   var"model"::Union{Nothing, System} = MyCarComponents.Lecture4.ConverterDyno(; name=:ConverterDyno)
-  __system::System = ConverterDynoTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file")
+  __system::System = ConverterDynoTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file", var"V"=var"V", var"I_ref"=var"I_ref", var"rpm_start"=var"rpm_start", var"rpm_end"=var"rpm_end")
 end
 
 function __dyad_base_analysis_spec(spec::ConverterDynoTransient__Spec)
   overrides = Dict{SymbolicT, SymbolicT}()
   no_namespace_model = toggle_namespacing(spec.model, false)
-  
+  push!(overrides, no_namespace_model.V => spec.var"V")
+  push!(overrides, no_namespace_model.I_ref => spec.var"I_ref")
+  push!(overrides, no_namespace_model.rpm_start => spec.var"rpm_start")
+  push!(overrides, no_namespace_model.rpm_end => spec.var"rpm_end")
   merge!(overrides, spec.__overrides)
   TransientAnalysisSpec(;
     name=spec.name, overrides, __system=spec.__system, var"alg"=spec.var"alg", var"start"=spec.var"start", var"stop"=spec.var"stop", var"abstol"=spec.var"abstol", var"reltol"=spec.var"reltol", var"saveat"=spec.var"saveat", var"dtmax"=spec.var"dtmax", var"tstops"=spec.var"tstops", var"automatic_discontinuity_detection"=spec.var"automatic_discontinuity_detection", var"optimize"=spec.var"optimize", var"progress"=spec.var"progress", var"respecialize"=spec.var"respecialize", var"specialization"=spec.var"specialization", var"verbose"=spec.var"verbose", var"log_file"=spec.var"log_file", var"model"=spec.var"model"

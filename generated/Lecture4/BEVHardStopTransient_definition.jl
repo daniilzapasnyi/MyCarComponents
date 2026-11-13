@@ -6,7 +6,7 @@
 
 using DyadInterface
 using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
-@component function BEVHardStopTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=6, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=1.0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", __overrides = Dict{String, Any}())
+@component function BEVHardStopTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=6, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=1.0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", var"P_charge"=80500.0, var"withdraw"=1.0, __overrides = Dict{String, Any}())
   isnothing(name) && throw(ArgumentError("""
     The `name` keyword must be provided. Please consider using the `@named` macro,
     like so:
@@ -40,6 +40,8 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   haskey(__overrides, "specialization") && (specialization = pop!(__overrides, "specialization"))
   haskey(__overrides, "verbose") && (verbose = pop!(__overrides, "verbose"))
   haskey(__overrides, "log_file") && (log_file = pop!(__overrides, "log_file"))
+  haskey(__overrides, "P_charge") && (P_charge = pop!(__overrides, "P_charge"))
+  haskey(__overrides, "withdraw") && (withdraw = pop!(__overrides, "withdraw"))
 
   ### Structural Parameters (functions)
 
@@ -99,6 +101,12 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   __local__log_file = log_file
   append!(__params, @parameters (log_file::String))
   __dyad_seed_parameter!(__initial_conditions, __bindings, log_file, __local__log_file)
+  __local__P_charge = P_charge
+  append!(__params, @parameters (P_charge::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, P_charge, __local__P_charge)
+  __local__withdraw = withdraw
+  append!(__params, @parameters (withdraw::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, withdraw, __local__withdraw)
 
   ### Final Parameters (assignments)
 
@@ -114,7 +122,7 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   ### Components
   # Subcomponent model of type MyCarComponents.Lecture4.BEVHardStop
   model_overrides = __pop_subcomponent_overrides!(__overrides, "model")
-  push!(__systems, @named model = MyCarComponents.Lecture4.BEVHardStop(; __overrides = model_overrides))
+  push!(__systems, @named model = MyCarComponents.Lecture4.BEVHardStop(; P_charge=P_charge, withdraw=withdraw, __overrides = model_overrides))
 
   ### Check there are no unmatched overrides
   isempty(__overrides) || throw(ArgumentError("overrides: [$(join(keys(__overrides), ", "))] don't match names found in model. These names may exist in the model but could have been conditionally excluded. Override keys are dotted paths as written in Dyad source (e.g. inner.rate)."))
@@ -151,14 +159,17 @@ export BEVHardStopTransient__System
   var"specialization"::SpecializationLevel.Type = SpecializationLevel.Despecialize()
   var"verbose"::DEVerbosity.Type = DEVerbosity.Standard()
   var"log_file"::String = ""
+  var"P_charge"::Float64 = 80500.0
+  var"withdraw"::Float64 = 1.0
   var"model"::Union{Nothing, System} = MyCarComponents.Lecture4.BEVHardStop(; name=:BEVHardStop)
-  __system::System = BEVHardStopTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file")
+  __system::System = BEVHardStopTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file", var"P_charge"=var"P_charge", var"withdraw"=var"withdraw")
 end
 
 function __dyad_base_analysis_spec(spec::BEVHardStopTransient__Spec)
   overrides = Dict{SymbolicT, SymbolicT}()
   no_namespace_model = toggle_namespacing(spec.model, false)
-  
+  push!(overrides, no_namespace_model.P_charge => spec.var"P_charge")
+  push!(overrides, no_namespace_model.withdraw => spec.var"withdraw")
   merge!(overrides, spec.__overrides)
   TransientAnalysisSpec(;
     name=spec.name, overrides, __system=spec.__system, var"alg"=spec.var"alg", var"start"=spec.var"start", var"stop"=spec.var"stop", var"abstol"=spec.var"abstol", var"reltol"=spec.var"reltol", var"saveat"=spec.var"saveat", var"dtmax"=spec.var"dtmax", var"tstops"=spec.var"tstops", var"automatic_discontinuity_detection"=spec.var"automatic_discontinuity_detection", var"optimize"=spec.var"optimize", var"progress"=spec.var"progress", var"respecialize"=spec.var"respecialize", var"specialization"=spec.var"specialization", var"verbose"=spec.var"verbose", var"log_file"=spec.var"log_file", var"model"=spec.var"model"

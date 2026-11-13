@@ -1,4 +1,5 @@
 analysis BEVRegenWLTCTransient
   extends TransientAnalysis(stop = 1800, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
-  model = BEVRegenWLTC()
+  parameter P_charge::Power = 80.5e3
+  model = BEVRegenWLTC(P_charge = P_charge)
 end
