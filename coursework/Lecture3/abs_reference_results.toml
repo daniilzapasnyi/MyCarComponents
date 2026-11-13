@@ -1,0 +1,55 @@
+[library_dry]
+distance_m = 38.69872486828896
+pass = true
+reference_m = 38.7
+stop_s = 6.9608999563128
+tolerance_m = 0.3
+
+[library_snow]
+distance_m = 141.2656590159358
+pass = true
+reference_m = 141.3
+stop_s = 19.702999854376003
+tolerance_m = 0.3
+
+[library_snow_low_estimate]
+distance_m = 128.44018827164717
+pass = true
+reference_m = 128.4
+stop_s = 19.702999854376003
+tolerance_m = 0.3
+
+[library_wet]
+distance_m = 83.19413413460515
+pass = true
+reference_m = 83.2
+stop_s = 12.4217999126256
+tolerance_m = 0.3
+
+[student_dry_low_estimate]
+distance_m = 106.32069578679273
+pass = true
+reference_m = 106.3
+stop_s = 15.0
+tolerance_m = 0.3
+
+[student_pedal_api]
+distance_m = 35.954383049972776
+pass = true
+reference_m = 36.0
+stop_s = 10.0
+tolerance_m = 0.3
+
+[student_slip_api]
+distance_m = 53.35127347088938
+pass = true
+reference_m = 53.4
+stop_s = 10.0
+tolerance_m = 0.3
+
+[student_snow_low_estimate]
+distance_m = 130.94687981362156
+pass = true
+reference_m = 130.9
+stop_s = 25.0
+tolerance_m = 0.3

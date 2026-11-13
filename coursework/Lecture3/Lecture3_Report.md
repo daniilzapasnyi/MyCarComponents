@@ -18,6 +18,8 @@ I started at 25 m/s, applied the pedal at 0.5 s, and tested pedal settings 0.3 a
 
 These agree with the guide's rounded values within 0.1 m. Pedal 0.3 stops the dry-road car in 35.954 m, shorter than locking the wheel with a harder push. Without look-ahead the slip controller takes 53.351 m, longer than the locked case.
 
+The library's 5 ms wheel-speed ECU stopped in 38.70 m on dry road, 83.19 m on wet road and 141.27 m on snow, against 38.7, 83.2 and 141.3 m in the guide. Reducing `a_ref` to 2.4 m/s² reduced the library ECU's snow stop to 128.44 m. My wheel-speed controller stopped in 130.95 m on snow and 106.32 m on dry road at the same setting. The low estimate barely changes the snow stop and causes premature release on dry road. See [check results](abs_reference_results.toml) and [reproduction script](../../scripts/check_abs_reference.jl).
+
 Analytical constant-friction bounds are about 31.9 m at peak dry grip and 45.5 m sliding; at multiplier 0.3 they are 106.2 and 151.7 m. These are estimates, excluding aerodynamic and rolling assistance.
 
 ## What the graphs show
