@@ -6,7 +6,7 @@
 
 using DyadInterface
 using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
-@component function PedalStopTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=20, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", __overrides = Dict{String, Any}())
+@component function PedalStopTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=20, var"abstol"=1e-7, var"reltol"=1e-7, var"saveat"=0, var"dtmax"=0.003, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", var"pedal"=0.6, var"road_mu"=1.0, __overrides = Dict{String, Any}())
   isnothing(name) && throw(ArgumentError("""
     The `name` keyword must be provided. Please consider using the `@named` macro,
     like so:
@@ -40,6 +40,8 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   haskey(__overrides, "specialization") && (specialization = pop!(__overrides, "specialization"))
   haskey(__overrides, "verbose") && (verbose = pop!(__overrides, "verbose"))
   haskey(__overrides, "log_file") && (log_file = pop!(__overrides, "log_file"))
+  haskey(__overrides, "pedal") && (pedal = pop!(__overrides, "pedal"))
+  haskey(__overrides, "road_mu") && (road_mu = pop!(__overrides, "road_mu"))
 
   ### Structural Parameters (functions)
 
@@ -99,6 +101,12 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   __local__log_file = log_file
   append!(__params, @parameters (log_file::String))
   __dyad_seed_parameter!(__initial_conditions, __bindings, log_file, __local__log_file)
+  __local__pedal = pedal
+  append!(__params, @parameters (pedal::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, pedal, __local__pedal)
+  __local__road_mu = road_mu
+  append!(__params, @parameters (road_mu::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, road_mu, __local__road_mu)
 
   ### Final Parameters (assignments)
 
@@ -114,7 +122,7 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   ### Components
   # Subcomponent model of type MyCarComponents.Lecture3.PedalStop
   model_overrides = __pop_subcomponent_overrides!(__overrides, "model")
-  push!(__systems, @named model = MyCarComponents.Lecture3.PedalStop(; __overrides = model_overrides))
+  push!(__systems, @named model = MyCarComponents.Lecture3.PedalStop(; pedal=pedal, road_mu=road_mu, __overrides = model_overrides))
 
   ### Check there are no unmatched overrides
   isempty(__overrides) || throw(ArgumentError("overrides: [$(join(keys(__overrides), ", "))] don't match names found in model. These names may exist in the model but could have been conditionally excluded. Override keys are dotted paths as written in Dyad source (e.g. inner.rate)."))
@@ -139,10 +147,10 @@ export PedalStopTransient__System
   var"alg"::ODEAlg.Type = ODEAlg.Rodas5P()
   var"start"::Float64 = 0
   var"stop"::Float64 = 20
-  var"abstol"::Float64 = 0.000001
-  var"reltol"::Float64 = 0.000001
+  var"abstol"::Float64 = 1e-7
+  var"reltol"::Float64 = 1e-7
   var"saveat"::Float64 = 0
-  var"dtmax"::Float64 = 0
+  var"dtmax"::Float64 = 0.003
   var"tstops"::Array{Float64, 1} = []
   var"automatic_discontinuity_detection"::Bool = false
   var"optimize"::OptimizationLevel.Type = OptimizationLevel.None()
@@ -151,14 +159,17 @@ export PedalStopTransient__System
   var"specialization"::SpecializationLevel.Type = SpecializationLevel.Despecialize()
   var"verbose"::DEVerbosity.Type = DEVerbosity.Standard()
   var"log_file"::String = ""
+  var"pedal"::Float64 = 0.6
+  var"road_mu"::Float64 = 1.0
   var"model"::Union{Nothing, System} = MyCarComponents.Lecture3.PedalStop(; name=:PedalStop)
-  __system::System = PedalStopTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file")
+  __system::System = PedalStopTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file", var"pedal"=var"pedal", var"road_mu"=var"road_mu")
 end
 
 function __dyad_base_analysis_spec(spec::PedalStopTransient__Spec)
   overrides = Dict{SymbolicT, SymbolicT}()
   no_namespace_model = toggle_namespacing(spec.model, false)
-  
+  push!(overrides, no_namespace_model.pedal => spec.var"pedal")
+  push!(overrides, no_namespace_model.road_mu => spec.var"road_mu")
   merge!(overrides, spec.__overrides)
   TransientAnalysisSpec(;
     name=spec.name, overrides, __system=spec.__system, var"alg"=spec.var"alg", var"start"=spec.var"start", var"stop"=spec.var"stop", var"abstol"=spec.var"abstol", var"reltol"=spec.var"reltol", var"saveat"=spec.var"saveat", var"dtmax"=spec.var"dtmax", var"tstops"=spec.var"tstops", var"automatic_discontinuity_detection"=spec.var"automatic_discontinuity_detection", var"optimize"=spec.var"optimize", var"progress"=spec.var"progress", var"respecialize"=spec.var"respecialize", var"specialization"=spec.var"specialization", var"verbose"=spec.var"verbose", var"log_file"=spec.var"log_file", var"model"=spec.var"model"

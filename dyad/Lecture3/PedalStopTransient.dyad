@@ -1,4 +1,6 @@
 analysis PedalStopTransient
-  extends TransientAnalysis(stop = 20, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
-  model = PedalStop()
+  extends TransientAnalysis(stop = 20, alg = ODEAlg.Rodas5P(), dtmax = 0.003, abstol = 1e-7, reltol = 1e-7, optimize = OptimizationLevel.None())
+  parameter pedal::Real = 0.6
+  parameter road_mu::Real = 1.0
+  model = PedalStop(pedal = pedal, road_mu = road_mu)
 end
