@@ -1,0 +1,6 @@
+battery_charging_final_soc = 0.9875001272746078
+converter_final_supply_V = 300.0
+energy_bill_500W_Whpkm = 135.53683307979597
+friction_recovered_battery_J = 0.0
+limited_charge_recovered_energy_J = 2.573887100913008e6
+machine_final_voltage_V = 200.0

@@ -47,3 +47,5 @@ Battery energy pays for useful motion and losses. Regeneration helps, but charge
 This is a DC-equivalent machine and an averaged converter. The battery has fixed open-circuit voltage and no temperature, aging or protection model. The hard-stop regen share is small because ABS withdrawal removes most regeneration; a short stop does not prove useful blending. The current guide documents that limitation too.
 
 Exact braking results, slip checks and any initial-clock interpolation workaround are in [TEST_RESULTS.md](TEST_RESULTS.md). The pinned library is retained. These are simulations, not physical measurements. Personal screenshots remain manual.
+
+The Dyad analyses accept the worksheet overrides directly. A separate check reran the 200 V machine, a 300 V converter case, charging at −20 A, the zero-charge-power hard stop, the 15 kW WLTC and the 500 W auxiliary case through the analysis entry points. The 500 W case gave 135.537 Wh/km. See [analysis results](analysis_results.toml) and the [check script](../../scripts/check_ev_analysis.jl).
