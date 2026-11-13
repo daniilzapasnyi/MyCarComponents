@@ -1,5 +1,9 @@
 "Reproducible MapEngineDyno experiment; see the lecture report for validation status."
 analysis MapEngineDynoTransient
   extends TransientAnalysis(stop = 3, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
-  model = MapEngineDyno()
+  parameter rpm::Real = 3080.0
+  parameter pedal_initial::Real = 0.1034
+  parameter pedal_final::Real = 0.12
+  parameter p_m0::Pressure = 47829.1
+  model = MapEngineDyno(rpm = rpm, pedal_initial = pedal_initial, pedal_final = pedal_final, p_m0 = p_m0)
 end

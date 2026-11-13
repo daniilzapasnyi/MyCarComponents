@@ -6,7 +6,7 @@
 
 using DyadInterface
 using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
-@component function MappedCarCruiseTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=60, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", __overrides = Dict{String, Any}())
+@component function MappedCarCruiseTransient__System(; name = nothing, var"alg"=ODEAlg.Rodas5P(), var"start"=0, var"stop"=60, var"abstol"=0.000001, var"reltol"=0.000001, var"saveat"=0, var"dtmax"=0, var"tstops"=[], var"automatic_discontinuity_detection"=false, var"optimize"=OptimizationLevel.None(), var"progress"=true, var"respecialize"=false, var"specialization"=SpecializationLevel.Despecialize(), var"verbose"=DEVerbosity.Standard(), var"log_file"="", var"speed_kmh"=90, var"pedal_cmd"=0.0916, var"rpm0"=2182, var"p_m0"=54420, __overrides = Dict{String, Any}())
   isnothing(name) && throw(ArgumentError("""
     The `name` keyword must be provided. Please consider using the `@named` macro,
     like so:
@@ -40,6 +40,10 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   haskey(__overrides, "specialization") && (specialization = pop!(__overrides, "specialization"))
   haskey(__overrides, "verbose") && (verbose = pop!(__overrides, "verbose"))
   haskey(__overrides, "log_file") && (log_file = pop!(__overrides, "log_file"))
+  haskey(__overrides, "speed_kmh") && (speed_kmh = pop!(__overrides, "speed_kmh"))
+  haskey(__overrides, "pedal_cmd") && (pedal_cmd = pop!(__overrides, "pedal_cmd"))
+  haskey(__overrides, "rpm0") && (rpm0 = pop!(__overrides, "rpm0"))
+  haskey(__overrides, "p_m0") && (p_m0 = pop!(__overrides, "p_m0"))
 
   ### Structural Parameters (functions)
 
@@ -99,6 +103,18 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   __local__log_file = log_file
   append!(__params, @parameters (log_file::String))
   __dyad_seed_parameter!(__initial_conditions, __bindings, log_file, __local__log_file)
+  __local__speed_kmh = speed_kmh
+  append!(__params, @parameters (speed_kmh::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, speed_kmh, __local__speed_kmh)
+  __local__pedal_cmd = pedal_cmd
+  append!(__params, @parameters (pedal_cmd::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, pedal_cmd, __local__pedal_cmd)
+  __local__rpm0 = rpm0
+  append!(__params, @parameters (rpm0::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, rpm0, __local__rpm0)
+  __local__p_m0 = p_m0
+  append!(__params, @parameters (p_m0::Float64))
+  __dyad_seed_parameter!(__initial_conditions, __bindings, p_m0, __local__p_m0)
 
   ### Final Parameters (assignments)
 
@@ -114,7 +130,7 @@ using DyadInterface: AbstractTransientAnalysisSpec, TransientAnalysisSpec
   ### Components
   # Subcomponent model of type MyCarComponents.Lecture2.MappedCarCruise
   model_overrides = __pop_subcomponent_overrides!(__overrides, "model")
-  push!(__systems, @named model = MyCarComponents.Lecture2.MappedCarCruise(; __overrides = model_overrides))
+  push!(__systems, @named model = MyCarComponents.Lecture2.MappedCarCruise(; speed_kmh=speed_kmh, pedal_cmd=pedal_cmd, rpm0=rpm0, p_m0=p_m0, __overrides = model_overrides))
 
   ### Check there are no unmatched overrides
   isempty(__overrides) || throw(ArgumentError("overrides: [$(join(keys(__overrides), ", "))] don't match names found in model. These names may exist in the model but could have been conditionally excluded. Override keys are dotted paths as written in Dyad source (e.g. inner.rate)."))
@@ -151,14 +167,21 @@ export MappedCarCruiseTransient__System
   var"specialization"::SpecializationLevel.Type = SpecializationLevel.Despecialize()
   var"verbose"::DEVerbosity.Type = DEVerbosity.Standard()
   var"log_file"::String = ""
+  var"speed_kmh"::Float64 = 90
+  var"pedal_cmd"::Float64 = 0.0916
+  var"rpm0"::Float64 = 2182
+  var"p_m0"::Float64 = 54420
   var"model"::Union{Nothing, System} = MyCarComponents.Lecture2.MappedCarCruise(; name=:MappedCarCruise)
-  __system::System = MappedCarCruiseTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file")
+  __system::System = MappedCarCruiseTransient__System(; name, var"alg"=var"alg", var"start"=var"start", var"stop"=var"stop", var"abstol"=var"abstol", var"reltol"=var"reltol", var"saveat"=var"saveat", var"dtmax"=var"dtmax", var"tstops"=var"tstops", var"automatic_discontinuity_detection"=var"automatic_discontinuity_detection", var"optimize"=var"optimize", var"progress"=var"progress", var"respecialize"=var"respecialize", var"specialization"=var"specialization", var"verbose"=var"verbose", var"log_file"=var"log_file", var"speed_kmh"=var"speed_kmh", var"pedal_cmd"=var"pedal_cmd", var"rpm0"=var"rpm0", var"p_m0"=var"p_m0")
 end
 
 function __dyad_base_analysis_spec(spec::MappedCarCruiseTransient__Spec)
   overrides = Dict{SymbolicT, SymbolicT}()
   no_namespace_model = toggle_namespacing(spec.model, false)
-  
+  push!(overrides, no_namespace_model.speed_kmh => spec.var"speed_kmh")
+  push!(overrides, no_namespace_model.pedal_cmd => spec.var"pedal_cmd")
+  push!(overrides, no_namespace_model.rpm0 => spec.var"rpm0")
+  push!(overrides, no_namespace_model.p_m0 => spec.var"p_m0")
   merge!(overrides, spec.__overrides)
   TransientAnalysisSpec(;
     name=spec.name, overrides, __system=spec.__system, var"alg"=spec.var"alg", var"start"=spec.var"start", var"stop"=spec.var"stop", var"abstol"=spec.var"abstol", var"reltol"=spec.var"reltol", var"saveat"=spec.var"saveat", var"dtmax"=spec.var"dtmax", var"tstops"=spec.var"tstops", var"automatic_discontinuity_detection"=spec.var"automatic_discontinuity_detection", var"optimize"=spec.var"optimize", var"progress"=spec.var"progress", var"respecialize"=spec.var"respecialize", var"specialization"=spec.var"specialization", var"verbose"=spec.var"verbose", var"log_file"=spec.var"log_file", var"model"=spec.var"model"
