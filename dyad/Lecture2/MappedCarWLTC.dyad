@@ -1,0 +1,37 @@
+"Lecture 2 bonus, built from the guide's task and advice using the student cruise controller."
+component MappedCarWLTC
+  trace = VehicleSystemsComponents.Vehicle.DriveCycle() {^trace}
+  driver = MyCarComponents.Lecture1.CruiseController(k = 0.14, Ti = 3.5, Td = 0.7, wd = 0, xi0 = 0, xd0 = 0, y_min = -1, y_max = 1, anti_windup = true) {^driver}
+  car = MappedCarWithBrake() {^car}
+  pedal = BlockComponents.Nonlinear.Limiter(y_min = 0, y_max = 1) {^pedal}
+  braking = BlockComponents.Nonlinear.Limiter(y_min = -1, y_max = 0) {^braking}
+  force = BlockComponents.Math.Gain(k = -4000) {^force}
+  fuel_L = BlockComponents.Continuous.Integrator(k = 1 / 3600, x0 = 0) {^fuel_L}
+  dist_km = BlockComponents.Continuous.Integrator(k = 1 / 3600, x0 = 0) {^dist_km}
+relations
+  connect(trace.y, driver.u_s)
+  connect(car.v_kmh, driver.u_m, dist_km.u)
+  connect(driver.y, pedal.u, braking.u)
+  connect(pedal.y, car.pedal)
+  connect(braking.y, force.u)
+  connect(force.y, car.F_brake)
+  connect(car.fuel_lph, fuel_L.u)
+  initial car.body.mass.s = 0
+  initial car.body.mass.v = 0
+  initial car.flywheel.phi = 0
+  initial car.flywheel.w = 775 * pi / 30
+  initial car.driveline.clutch.spline_b.phi = 0
+  initial car.engine.air.manifold.p = 33600
+metadata {
+  "_links": {
+    "trace": {"Dyad":{"placement":{"diagram":{"x1":30,"y1":250,"x2":130,"y2":350}}}},
+    "driver": {"Dyad":{"placement":{"diagram":{"x1":250,"y1":250,"x2":350,"y2":350}}}},
+    "car": {"Dyad":{"placement":{"diagram":{"x1":960,"y1":250,"x2":1060,"y2":350}}}},
+    "pedal": {"Dyad":{"placement":{"diagram":{"x1":480,"y1":150,"x2":580,"y2":250}}}},
+    "braking": {"Dyad":{"placement":{"diagram":{"x1":480,"y1":480,"x2":580,"y2":580}}}},
+    "force": {"Dyad":{"placement":{"diagram":{"x1":710,"y1":480,"x2":810,"y2":580}}}},
+    "fuel_L": {"Dyad":{"placement":{"diagram":{"x1":960,"y1":710,"x2":1060,"y2":810}}}},
+    "dist_km": {"Dyad":{"placement":{"diagram":{"x1":710,"y1":800,"x2":810,"y2":900}}}}
+  }
+}
+end

@@ -1,0 +1,58 @@
+# Adapted from the official 16ESPD build guide / Vehicle/Engine/AirPath.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component AirPath
+  "Throttle position: 0 closed against its stop, 1 wide open"
+  u_thr = RealInput() {^u_thr}
+  "Engine speed [rad/s]"
+  omega = RealInput() {^omega}
+  "Vacuum take-off: the hose to the brake booster, at manifold pressure"
+  vacuum = VehicleSystemsComponents.Vehicle.GasPort() {^vacuum}
+  "Manifold absolute pressure [Pa]"
+  p_m = RealOutput() {^p_m}
+  "Air mass flow into the cylinders [kg/s]"
+  mdot_cyl = RealOutput() {^mdot_cyl}
+  "Air mass flow through the throttle [kg/s]"
+  mdot_thr = RealOutput() {^mdot_thr}
+  throttle = VehicleSystemsComponents.Vehicle.Engine.Throttle(A_idle = A_idle, C_d = C_d, D_thr = D_thr) {^throttle}
+  manifold = MyCarComponents.MyManifold(V_m = V_m, T_m = T_m) {^manifold}
+  cylinders = VehicleSystemsComponents.Vehicle.Engine.CylinderAirflow(V_d = V_d, T_m = T_m) {^cylinders}
+  "Leakage plus idle-bypass area, sets 33 kPa idle at 800 rpm (derived)"
+  parameter A_idle::Area = 7.4e-6
+  "Throttle discharge coefficient (assumed)"
+  parameter C_d::Real = 0.8
+  "Throttle bore diameter (MathWorks)"
+  parameter D_thr::Length = 0.05
+  "Manifold volume (MathWorks)"
+  parameter V_m::Volume = 1.0e-3
+  "Displacement (MathWorks)"
+  parameter V_d::Volume = 1.5e-3
+  "Manifold air temperature (MathWorks)"
+  parameter T_m::Temperature = 298.15
+relations
+  connect(u_thr, throttle.u_thr) {^wire1}
+  connect(omega, cylinders.omega) {^wire2}
+  connect(vacuum, manifold.vacuum) {^wire3}
+  connect(throttle.mdot_thr, manifold.mdot_thr, mdot_thr) {^wire4}
+  connect(cylinders.mdot_cyl, manifold.mdot_cyl, mdot_cyl) {^wire5}
+  connect(manifold.p_m, throttle.p_m, cylinders.p_m, p_m) {^wire6}
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/Vehicle/Engine/AirPath.svg"}},
+  "_links": {
+    "u_thr": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":150,"x2":50,"y2":250},"icon":{"x1":-50,"y1":450,"x2":50,"y2":550}}}},
+    "omega": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":550,"x2":50,"y2":650},"icon":{"x1":-50,"y1":800,"x2":50,"y2":900}}}},
+    "vacuum": {"Dyad":{"placement":{"diagram":{"x1":150,"y1":950,"x2":250,"y2":1050},"icon":{"x1":150,"y1":950,"x2":250,"y2":1050}}}},
+    "p_m": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":150,"x2":1050,"y2":250},"icon":{"x1":950,"y1":450,"x2":1050,"y2":550}}}},
+    "mdot_cyl": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":550,"x2":1050,"y2":650},"icon":{"x1":950,"y1":800,"x2":1050,"y2":900}}}},
+    "mdot_thr": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":950,"x2":1050,"y2":1050},"icon":{"x1":950,"y1":800,"x2":1050,"y2":900}}}},
+    "throttle": {"Dyad":{"placement":{"diagram":{"x1":250,"y1":150,"x2":350,"y2":250}}}},
+    "manifold": {"Dyad":{"placement":{"diagram":{"x1":500,"y1":450,"x2":600,"y2":550}}}},
+    "cylinders": {"Dyad":{"placement":{"diagram":{"x1":700,"y1":700,"x2":800,"y2":800}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":150,"y":200},{"x":150,"y":180}],"E":2}],"path":{}}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":650,"y":800},{"x":650,"y":770}],"E":2}],"path":{}}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}},
+    "wire4": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[{"x":400,"y":470}],"E":2},{"S":-1,"M":[],"E":3}],"junctions":[{"x":400,"y":200}],"path":{}}},
+    "wire5": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[{"x":850,"y":880},{"x":450,"y":880},{"x":450,"y":530}],"E":2},{"S":-1,"M":[{"x":850,"y":800}],"E":3}],"junctions":[{"x":850,"y":750}],"path":{}}},
+    "wire6": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[{"x":650,"y":350},{"x":200,"y":350},{"x":200,"y":220}],"E":2},{"S":-1,"M":[{"x":650,"y":730}],"E":3},{"S":-1,"M":[],"E":4}],"junctions":[{"x":650,"y":500}],"path":{}}}
+  }
+}
+end

@@ -1,0 +1,9 @@
+"Reproducible MappedCarCruise experiment; see the lecture report for validation status."
+analysis MappedCarCruiseTransient
+  extends TransientAnalysis(stop = 60, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  parameter speed_kmh::Real = 90
+  parameter pedal_cmd::Real = 0.0916
+  parameter rpm0::Real = 2182
+  parameter p_m0::Pressure = 54420
+  model = MappedCarCruise(speed_kmh = speed_kmh, pedal_cmd = pedal_cmd, rpm0 = rpm0, p_m0 = p_m0)
+end

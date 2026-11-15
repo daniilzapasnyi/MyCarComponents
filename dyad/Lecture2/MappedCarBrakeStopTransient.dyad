@@ -1,0 +1,5 @@
+"Reproducible MappedCarBrakeStop experiment; see the lecture report for validation status."
+analysis MappedCarBrakeStopTransient
+  extends TransientAnalysis(stop = 20, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = MappedCarBrakeStop()
+end

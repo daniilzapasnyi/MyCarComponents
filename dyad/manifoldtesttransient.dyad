@@ -1,0 +1,10 @@
+
+"Test of intake manifold pressure"
+
+analysis ManifoldTestTransient
+  extends Dyad.TransientAnalysis(stop = 2.0)
+
+  model = ManifoldTest()
+
+relations
+end

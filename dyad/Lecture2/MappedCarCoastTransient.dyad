@@ -1,0 +1,5 @@
+"Reproducible MappedCarCoast experiment; see the lecture report for validation status."
+analysis MappedCarCoastTransient
+  extends TransientAnalysis(stop = 100, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = MappedCarCoast()
+end

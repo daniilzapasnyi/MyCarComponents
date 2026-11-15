@@ -1,0 +1,4 @@
+analysis MappedCarWLTCTransient
+  extends TransientAnalysis(stop = 1800, saveat = 1, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = MappedCarWLTC()
+end

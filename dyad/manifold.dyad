@@ -1,0 +1,45 @@
+
+"Simple intake manifold model"
+component MyManifold
+
+  "Air entering through the throttle [kg/s]"
+  mdot_thr = RealInput() {^mdot_thr}
+
+  "Air going into the engine cylinders [kg/s]"
+  mdot_cyl = RealInput() {^mdot_cyl}
+
+  "Connection to the brake booster"
+  vacuum = VehicleSystemsComponents.Vehicle.GasPort() {^vacuum}
+
+  "Manifold pressure output [Pa]"
+  p_m = RealOutput() {^p_m}
+
+  "Manifold volume [m3]"
+  parameter V_m::Volume = 1.0e-3
+
+  "Air temperature [K]"
+  parameter T_m::Temperature = 298.15
+
+  "Specific gas constant for air"
+  parameter R::Real = 287.05
+
+  "Pressure inside the manifold"
+  variable p::Pressure
+
+relations
+
+  V_m / (R * T_m) * der(p) =
+    mdot_thr + vacuum.mdot - mdot_cyl
+
+  vacuum.p = p
+  p_m = p
+
+metadata {
+  "_links": {
+    "mdot_thr": {"Dyad":{"placement":{"icon":{"x1":-50,"y1":200,"x2":50,"y2":300},"diagram":{"x1":-50,"y1":200,"x2":50,"y2":300}}}},
+    "mdot_cyl": {"Dyad":{"placement":{"icon":{"x1":-50,"y1":700,"x2":50,"y2":800},"diagram":{"x1":-50,"y1":700,"x2":50,"y2":800}}}},
+    "vacuum": {"Dyad":{"placement":{"icon":{"iconName":"gas_port_a","x1":-50,"y1":450,"x2":50,"y2":550},"diagram":{"iconName":"gas_port_a","x1":-50,"y1":450,"x2":50,"y2":550}}}},
+    "p_m": {"Dyad":{"placement":{"icon":{"x1":950,"y1":450,"x2":1050,"y2":550},"diagram":{"x1":950,"y1":450,"x2":1050,"y2":550}}}}
+  }
+}
+end

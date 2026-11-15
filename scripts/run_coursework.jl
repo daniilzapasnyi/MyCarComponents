@@ -9,6 +9,7 @@ const CASE_ID = CASE == 0 ? "" : split(ARGS[CASE], "="; limit=2)[2]
 const CASES_ARG = findfirst(startswith("--cases="),ARGS)
 const CASES = CASES_ARG === nothing ? Set{String}() : Set(split(split(ARGS[CASES_ARG],"=";limit=2)[2],','))
 const L1 = MyCarComponents.Lecture1
+const L2 = MyCarComponents.Lecture2
 const JOURNAL = joinpath(ROOT, "coursework", "validation.log")
 function logline(s)
     println(s); flush(stdout)
@@ -169,6 +170,28 @@ for (id,mu) in [("standing_dry",1.0),("standing_slippery",0.2)]
     sim(1,id,L1.SlipCarStandingStart;stop=5,overrides=Dict{String,Any}("friction.k"=>mu),dt=0.01,
         paths=["speed_kmh"=>"car.v_kmh","wheel_speed_kmh"=>"car.wheel_kmh","slip_ratio"=>"car.wheel.kappa"],
         evaluate=(r,m,t,v,d)->compare!(d,"final_speed_kmh",v["speed_kmh"][end],mu==1 ? 21.08 : 10.12,0.1))
+end
+
+end
+if isempty(SELECTED) || 2 in SELECTED
+sim(2,"existing_manifold",MyCarComponents.ManifoldTest;stop=2,dt=0.01,
+    paths=["pressure_Pa"=>"manifold.p"],evaluate=(r,m,t,v,d)->compare!(d,"final_pressure_Pa",v["pressure_Pa"][end],50000+287.05*298.15/0.001*0.0001,2.0))
+for (id,ov) in [("air_idle",Dict{String,Any}()),("air_3000",Dict{String,Any}("speed.k"=>3000pi/30,"throttle_cmd.height"=>1.0))]
+    sim(2,id,L2.AirPathStep;stop=2,overrides=ov,dt=0.002,
+        paths=["pressure_Pa"=>"manifold.p","throttle_kgps"=>"throttle.mdot_thr","cylinder_kgps"=>"cylinders.mdot_cyl"],
+        evaluate=(r,m,t,v,d)->compare!(d,"final_pressure_Pa",v["pressure_Pa"][end],id=="air_idle" ? 37300 : 99900,500))
+end
+for (id,ctor,kw,stop) in [("dyno_step",L2.MapEngineDyno,(;),3),("dyno_WOT",L2.MapEngineDyno,(rpm=3000.0,pedal_initial=0.0,pedal_final=1.0,p_m0=13500.0),2),("dyno_fuel_cut",L2.MapEngineFuelCutDyno,(rpm=3000.0,pedal_initial=1.0,pedal_final=0.0,p_m0=99900.0),7)]
+    sim(2,id,ctor;stop,kwargs=kw,dt=0.002,paths=["torque_Nm"=>"engine.torque_map.y","fuel_kgps"=>"engine.mdot_fuel","pressure_Pa"=>"engine.p_m"])
+end
+for (speed,pedal,rpm,pressure,ref) in [(50.0,0.0486,1992.0,40100.0,3.7),(90.0,0.0916,2182.0,54420.0,3.9),(130.0,0.1742,3118.0,67200.0,6.0)]
+    sim(2,"student_cruise_$(Int(speed))",L2.MappedCarCruise;stop=60,dt=0.1,
+        kwargs=(speed_kmh=speed,pedal_cmd=pedal,rpm0=rpm,p_m0=pressure),
+        paths=["speed_kmh"=>"car.v_kmh","fuel_kgps"=>"car.engine.mdot_fuel","pressure_Pa"=>"car.engine.p_m"],
+        evaluate=(r,m,t,v,d)->begin fuel_eval(r,m,t,v,d);compare!(d,"fuel_L100km",d["fuel_L100km"],ref,0.15);require!(d,"cruise_speed",maximum(abs.(v["speed_kmh"].-speed))<0.3);end)
+end
+for (id,ctor,stop) in [("mapped_WOT",L2.MappedCarWOT,300),("coast_down",L2.MappedCarCoast,100),("brake_stop",L2.MappedCarBrakeStop,20)]
+    sim(2,id,ctor;stop,dt=0.05,paths=["speed_kmh"=>"car.v_kmh","fuel_kgps"=>"car.engine.mdot_fuel","pressure_Pa"=>"car.engine.p_m"],evaluate=fuel_eval)
 end
 
 end

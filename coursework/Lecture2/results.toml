@@ -1,0 +1,353 @@
+[air_3000]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_pressure_Pa = 99889.9141937007
+final_pressure_Pa_pass = true
+final_pressure_Pa_reference = 99900
+final_pressure_Pa_tolerance = 500
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0133746
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 2.0
+stop_requested_s = 2
+timestamp_utc = "2026-11-10T19:42:48.188"
+
+    [air_3000.nested_overrides]
+    "speed.k" = "314.1592653589793"
+    "throttle_cmd.height" = "1.0"
+
+    [air_3000.parameters]
+
+[air_idle]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_pressure_Pa = 37270.18815238122
+final_pressure_Pa_pass = true
+final_pressure_Pa_reference = 37300
+final_pressure_Pa_tolerance = 500
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.827524
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 2.0
+stop_requested_s = 2
+timestamp_utc = "2026-11-10T19:42:45.992"
+
+    [air_idle.nested_overrides]
+
+    [air_idle.parameters]
+
+[brake_stop]
+CO2_gpkm = 61.67781581625387
+abstol = 1.0e-7
+distance_m = 223.53616413256594
+dtmax_s = 0.05
+final_speed_kmh = 3.102681829255834e-5
+finite_signals_pass = true
+fuel_L100km = 2.679256133283546
+fuel_kg = 0.0044618842587832675
+fuel_nonnegative_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 1.2836272
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 20.0
+stop_requested_s = 20
+time_below_half_kmh_s = 12.95
+timestamp_utc = "2026-11-10T19:43:25.463"
+
+    [brake_stop.nested_overrides]
+
+    [brake_stop.parameters]
+
+[coast_down]
+CO2_gpkm = 20.40326180724577
+abstol = 1.0e-7
+distance_m = 1050.0730440613631
+dtmax_s = 0.05
+final_speed_kmh = 6.116004922682625e-5
+finite_signals_pass = true
+fuel_L100km = 0.8863083689427149
+fuel_kg = 0.006933629525797901
+fuel_nonnegative_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 1.5450654
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 100.0
+stop_requested_s = 100
+time_below_half_kmh_s = 90.55
+timestamp_utc = "2026-11-10T19:43:21.622"
+
+    [coast_down.nested_overrides]
+
+    [coast_down.parameters]
+
+[dyno_WOT]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_fuel_gps = 3.7466864183727586
+final_pressure_kPa = 99.88991419370069
+final_torque_Nm = 148.38342451540396
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.042846
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 2.0
+stop_requested_s = 2
+timestamp_utc = "2026-11-10T19:42:59.999"
+
+    [dyno_WOT.nested_overrides]
+
+    [dyno_WOT.parameters]
+    p_m0 = "13500.0"
+    pedal_final = "1.0"
+    pedal_initial = "0.0"
+    rpm = "3000.0"
+
+[dyno_fuel_cut]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_fuel_gps = 0.09635709689867754
+final_pressure_kPa = 32.95573310244246
+final_torque_Nm = -0.5806411273603761
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 1.0984667
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 7.0
+stop_requested_s = 7
+timestamp_utc = "2026-11-10T19:43:04.481"
+
+    [dyno_fuel_cut.nested_overrides]
+
+    [dyno_fuel_cut.parameters]
+    p_m0 = "99900.0"
+    pedal_final = "0.0"
+    pedal_initial = "1.0"
+    rpm = "3000.0"
+
+[dyno_step]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_fuel_gps = 1.022684669089726
+final_pressure_kPa = 52.94401398119897
+final_torque_Nm = 41.37219418464242
+finite_signals_pass = true
+plot_status = "exported"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 2.2294357
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 3.0
+stop_requested_s = 3
+timestamp_utc = "2026-11-10T20:56:18.409"
+
+    [dyno_step.nested_overrides]
+
+    [dyno_step.parameters]
+
+[existing_manifold]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_pressure_Pa = 58558.39081368042
+final_pressure_Pa_pass = true
+final_pressure_Pa_reference = 58558.395749999996
+final_pressure_Pa_tolerance = 2.0
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.6960115
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 2.0
+stop_requested_s = 2
+timestamp_utc = "2026-11-10T19:42:43.010"
+
+    [existing_manifold.nested_overrides]
+
+    [existing_manifold.parameters]
+
+[mapped_WLTC]
+CO2_gpkm = 120.11879363126799
+abstol = 1.0e-7
+distance_km = 23.2699045252605
+dtmax_s = 0.1
+finite_signals_pass = true
+fuel_L = 1.2142280015156712
+fuel_L100km = 5.218018837153258
+fuel_L100km_pass = true
+fuel_L100km_reference = 5.22
+fuel_L100km_tolerance = 0.25
+phase_ExtraHigh_L100km = 5.406438683257888
+phase_High_L100km = 4.589250723575233
+phase_Low_L100km = 6.297059935853092
+phase_Medium_L100km = 5.135071234244898
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 40.1618532
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1800.0
+stop_requested_s = 1800
+timestamp_utc = "2026-11-10T19:52:14.470"
+tracking_band_pass = true
+tracking_band_percent = 98.31676017999
+
+    [mapped_WLTC.nested_overrides]
+
+    [mapped_WLTC.parameters]
+
+[mapped_WOT]
+CO2_gpkm = 409.4555903213784
+abstol = 1.0e-7
+distance_m = 16107.885374825073
+dtmax_s = 0.05
+final_speed_kmh = 205.32967636874707
+finite_signals_pass = true
+fuel_L100km = 17.786563728910252
+fuel_kg = 2.134454276691941
+fuel_nonnegative_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 2.760929
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 300.0
+stop_requested_s = 300
+time_100kmh_s = 10.45
+timestamp_utc = "2026-11-10T19:43:17.625"
+
+    [mapped_WOT.nested_overrides]
+
+    [mapped_WOT.parameters]
+
+[student_cruise_130]
+CO2_gpkm = 138.13022937414948
+abstol = 1.0e-7
+cruise_speed_pass = true
+distance_m = 2168.619165703895
+dtmax_s = 0.05
+final_speed_kmh = 130.1790327245929
+finite_signals_pass = true
+fuel_L100km = 6.000314040709345
+fuel_L100km_pass = true
+fuel_L100km_reference = 6.0
+fuel_L100km_tolerance = 0.15
+fuel_kg = 0.09694235041548728
+fuel_nonnegative_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.4774671
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 60.0
+stop_requested_s = 60
+timestamp_utc = "2026-11-10T19:43:15.285"
+
+    [student_cruise_130.nested_overrides]
+
+    [student_cruise_130.parameters]
+    p_m0 = "67200.0"
+    pedal_cmd = "0.1742"
+    rpm0 = "3118.0"
+    speed_kmh = "130.0"
+
+[student_cruise_50]
+CO2_gpkm = 84.50827796670222
+abstol = 1.0e-7
+cruise_speed_pass = true
+distance_m = 833.2073147038594
+dtmax_s = 0.05
+final_speed_kmh = 49.98712661103904
+finite_signals_pass = true
+fuel_L100km = 3.671000975943277
+fuel_L100km_pass = true
+fuel_L100km_reference = 3.7
+fuel_L100km_tolerance = 0.15
+fuel_kg = 0.022787351247535042
+fuel_nonnegative_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 2.3881044
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 60.0
+stop_requested_s = 60
+timestamp_utc = "2026-11-10T19:43:10.918"
+
+    [student_cruise_50.nested_overrides]
+
+    [student_cruise_50.parameters]
+    p_m0 = "40100.0"
+    pedal_cmd = "0.0486"
+    rpm0 = "1992.0"
+    speed_kmh = "50.0"
+
+[student_cruise_90]
+CO2_gpkm = 90.87006727948402
+abstol = 1.0e-7
+cruise_speed_pass = true
+distance_m = 1499.9076001796427
+dtmax_s = 0.05
+final_speed_kmh = 89.99118038269613
+finite_signals_pass = true
+fuel_L100km = 3.9473541964546395
+fuel_L100km_pass = true
+fuel_L100km_reference = 3.9
+fuel_L100km_tolerance = 0.15
+fuel_kg = 0.04410896587098174
+fuel_nonnegative_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.3046307
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 60.0
+stop_requested_s = 60
+timestamp_utc = "2026-11-10T19:43:14.669"
+
+    [student_cruise_90.nested_overrides]
+
+    [student_cruise_90.parameters]
+    p_m0 = "54420.0"
+    pedal_cmd = "0.0916"
+    rpm0 = "2182.0"
+    speed_kmh = "90.0"

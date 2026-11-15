@@ -32,3 +32,21 @@ sim(1,"limited_cruise_step",L1.CruiseExperiment;stop=100,kwargs=(y_max=150.0,y_m
     paths=["speed_kmh"=>"plant.v_kmh","torque_Nm"=>"controller.y"],
     evaluate=(r,m,t,v,d)->begin require!(d,"torque_limits",minimum(v["torque_Nm"])>=0&&maximum(v["torque_Nm"])<=150);compare!(d,"final_speed_kmh",last(v["speed_kmh"]),110,0.1);end)
 end
+if isempty(SELECTED) || 2 in SELECTED
+sim(2,"mapped_WLTC",L2.MappedCarWLTC;stop=1800,dt=0.1,dtmax=0.1,
+    paths=["target_kmh"=>"trace.y","speed_kmh"=>"car.v_kmh","fuel_L"=>"fuel_L.y","distance_km"=>"dist_km.y","effort_fraction"=>"driver.y"],
+    evaluate=(r,m,t,v,d)->begin
+        L,km=last(v["fuel_L"]),last(v["distance_km"])
+        d["fuel_L"]=L;d["distance_km"]=km
+        compare!(d,"fuel_L100km",100L/km,5.22,0.25)
+        d["CO2_gpkm"]=2302L/km
+        target=v["target_kmh"];actual=v["speed_kmh"]
+        inside=[minimum(target[max(1,i-10):min(length(t),i+10)])-2<=actual[i]<=maximum(target[max(1,i-10):min(length(t),i+10)])+2 for i in eachindex(t)]
+        d["tracking_band_percent"]=100count(inside)/length(t)
+        require!(d,"tracking_band",d["tracking_band_percent"]>=95)
+        for (name,a,b) in [("Low",0,589),("Medium",589,1022),("High",1022,1477),("ExtraHigh",1477,1800)]
+            fuel=Float64(r.sol(b;idxs=m.fuel_L.y)-r.sol(a;idxs=m.fuel_L.y));distance=Float64(r.sol(b;idxs=m.dist_km.y)-r.sol(a;idxs=m.dist_km.y))
+            d["phase_$(name)_L100km"]=100fuel/distance
+        end
+    end)
+end
