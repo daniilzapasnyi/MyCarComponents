@@ -81,7 +81,7 @@ I ran the synthetic manifold test, real air-path tests at idle and 3000 rpm, a s
 
 The new cruise tests use speed-consistent initial engine rpm and manifold pressure. The small changes from the earlier estimates are expected from the changed starting conditions. They agree with the guide's rounded CVT values, 3.7, 3.9 and 6.0 L/100 km. Fuel is integrated in kg and divided by simulated distance, using 0.745 kg/L. CO₂ is calculated from fuel mass using the course factor; it is not measured emissions.
 
-The idle manifold settles at 37.27 kPa after the small throttle step, against 37.3 kPa in the guide. At wide-open throttle and 3000 rpm it reaches 99.89 kPa. The original synthetic manifold test also passes its analytical pressure-rise check.
+The idle manifold settles at 37.27 kPa after the small throttle step, against 37.3 kPa in the guide. At wide-open throttle and 3000 rpm it reaches 99.89 kPa. The [synthetic flow-step bench](graphs/existing_manifold.svg) gives 58.5584 kPa at 2 s. It starts at 50 kPa and increases inlet flow by 0.0001 kg/s at 1 s while holding outlet flow constant and closing the vacuum port. Integrating the ideal-gas mass balance with 1 L volume and 298.15 K gives 58.5584 kPa independently of the solver.
 
 The full WLTC uses 5.218 L/100 km and gives 120.12 g CO₂/km. It is inside the specified ±2 km/h, ±1 s band for 98.32% of the run, above the required 95%. The phase consumptions are 6.297, 5.135, 4.589 and 5.406 L/100 km. These match the guide's rounded values. The guide quotes about 98.5% band coverage; sampling and the exact tested controller implementation give a small difference here.
 
