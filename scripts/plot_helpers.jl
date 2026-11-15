@@ -13,7 +13,7 @@ function plot_indices(y)
 end
 
 "Export a labelled SVG with separate panels for quantities with different units."
-function saveplot(file, title, ts, values)
+function saveplot(file, title, ts, values; xlabel="Time [s]", panels=nothing)
     GR.beginprint(file)
     try
         GR.clearws()
@@ -21,11 +21,13 @@ function saveplot(file, title, ts, values)
         GR.selntran(0);GR.setfillintstyle(1);GR.setfillcolorind(0)
         GR.fillrect(0,1,0,1);GR.setlinecolorind(1);GR.settextcolorind(1)
         GR.selntran(1)
-        panels=[(label,[label=>y]) for (label,y) in values]
-        if haskey(values,"target_kmh") && haskey(values,"speed_kmh")
-            panels=vcat([("speed_kmh",["actual"=>values["speed_kmh"],"target"=>values["target_kmh"]]),
-                ("speed_error_kmh",["error"=>values["target_kmh"].-values["speed_kmh"]])],
-                [(label,[label=>y]) for (label,y) in values if !(label in ["target_kmh","speed_kmh"])])
+        if isnothing(panels)
+            panels=[(label,[label=>y]) for (label,y) in values]
+            if haskey(values,"target_kmh") && haskey(values,"speed_kmh")
+                panels=vcat([("speed_kmh",["actual"=>values["speed_kmh"],"target"=>values["target_kmh"]]),
+                    ("speed_error_kmh",["error"=>values["target_kmh"].-values["speed_kmh"]])],
+                    [(label,[label=>y]) for (label,y) in values if !(label in ["target_kmh","speed_kmh"])])
+            end
         end
         n=length(panels)
         for (j,(label,traces)) in enumerate(panels)
@@ -55,7 +57,7 @@ function saveplot(file, title, ts, values)
                 GR.settextcolorind(1)
             end
             j==1 && GR.text(0.55,0.98,title)
-            j==n && GR.text(0.55,0.035,"Time [s]")
+            j==n && GR.text(0.55,0.035,xlabel)
             GR.setcharup(-1,0)
             axislabel=replace(label,r"_kmh$"=>" [km/h]",r"_mps$"=>" [m/s]",r"_radps$"=>" [rad/s]",
                 r"_Nm$"=>" [N m]",r"_Pa$"=>" [Pa]",r"_kgps$"=>" [kg/s]",r"_fraction$"=>" [-]",r"_A$"=>" [A]",r"_V$"=>" [V]",r"_W$"=>" [W]",r"_rpm$"=>" [rpm]",r"_km$"=>" [km]",r"_L$"=>" [L]",r"_ratio$"=>" [-]")

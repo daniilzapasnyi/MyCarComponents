@@ -36,7 +36,7 @@ From pedal application at 0.5 s until the car reaches 0.5 m/s, the regen case ab
 
 ## What the graphs show
 
-[Converter envelope](graphs/converter_350V.svg) shows current limiting and field weakening. [Battery discharge](graphs/battery_100A.svg) shows voltage sag and falling SoC. [Energy-bill WLTC](graphs/energy_bill.svg) shows speed and battery current over the full cycle. Hard-stop graphs in [TEST_RESULTS.md](TEST_RESULTS.md) include slip, since distance alone can hide wheel reversal.
+[Converter envelope](graphs/converter_350V.svg) shows current limiting and field weakening. [Battery discharge](graphs/battery_100A.svg) shows voltage sag and falling SoC. [Energy-bill WLTC](graphs/energy_bill.svg) shows speed and battery current over the full cycle. The dry hard-stop plots show [front and rear friction-brake torque and vehicle speed](graphs/dry_hard_stop_brakes.svg) and the [ABS-limited regenerative torque ceiling and machine request against vehicle speed](graphs/dry_hard_stop_envelope.svg). The [slip traces](TEST_RESULTS.md) show wheel behaviour throughout the stops.
 
 ## What I learned
 
@@ -48,4 +48,4 @@ This is a DC-equivalent machine and an averaged converter. The battery has fixed
 
 Exact braking results, slip checks and any initial-clock interpolation workaround are in [TEST_RESULTS.md](TEST_RESULTS.md). The pinned library is retained. These are simulations, not physical measurements. Personal screenshots remain manual.
 
-The Dyad analyses accept the worksheet overrides directly. A separate check reran the 200 V machine, a 300 V converter case, charging at −20 A, the zero-charge-power hard stop, the 15 kW WLTC and the 500 W auxiliary case through the analysis entry points. The 500 W case gave 135.537 Wh/km. See [analysis results](analysis_results.toml) and the [check script](../../scripts/check_ev_analysis.jl).
+The Dyad analyses accept the worksheet overrides directly. A separate check reran the 200 V machine, a 300 V converter case, charging at −20 A, both dry hard stops, the 15 kW WLTC and the 500 W auxiliary case through the analysis entry points. It enforces the 1% stopping-distance tolerance and a slip floor of −0.2 above 3 m/s in the coordinated stop. The 500 W case gives 135.537 Wh/km. See [analysis results](analysis_results.toml) and the [check script](../../scripts/check_ev_analysis.jl). To reproduce the two new plots, pass a graph directory as the second script argument after the results TOML path.
