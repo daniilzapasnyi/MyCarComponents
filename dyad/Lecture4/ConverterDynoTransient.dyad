@@ -1,0 +1,8 @@
+analysis ConverterDynoTransient
+  extends TransientAnalysis(stop = 102, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
+  parameter V::Voltage = 350.0
+  parameter I_ref::Current = 500.0
+  parameter rpm_start::Real = 0.0
+  parameter rpm_end::Real = 10000.0
+  model = ConverterDyno(V = V, I_ref = I_ref, rpm_start = rpm_start, rpm_end = rpm_end)
+end

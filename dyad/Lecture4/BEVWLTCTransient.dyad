@@ -1,0 +1,4 @@
+analysis BEVWLTCTransient
+  extends TransientAnalysis(stop = 1800, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
+  model = BEVWLTC()
+end

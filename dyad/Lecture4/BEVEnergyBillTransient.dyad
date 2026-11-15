@@ -1,0 +1,5 @@
+analysis BEVEnergyBillTransient
+  extends TransientAnalysis(stop = 1800, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
+  parameter P_aux::Power = 300.0
+  model = BEVEnergyBill(P_aux = P_aux)
+end

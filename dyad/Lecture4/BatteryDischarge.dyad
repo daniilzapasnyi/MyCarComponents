@@ -1,0 +1,25 @@
+# Adapted from official 16ESPD HandsOn04/BatteryDischarge.dyad (BatteryDischarge).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component BatteryDischarge
+  "Current drawn from the battery once the load is on; negative charges it"
+  parameter I_load::Current = 100.0
+  load_profile = BlockComponents.Sources.Step(height = I_load, offset = 0.0, start_time = 60.0) {^load_profile}
+  load = ElectricalComponents.Analog.Sources.CurrentSource() {^load}
+  battery = Battery() {^battery}
+  ground = ElectricalComponents.Analog.Basic.Ground() {^ground}
+relations
+  connect(load_profile.y, load.I) {^wire1}
+  connect(battery.p, load.p) {^wire2}
+  connect(battery.n, load.n, ground.g) {^wire3}
+metadata {
+  "_links": {
+    "load_profile": {"Dyad":{"placement":{"diagram":{"x1":260,"y1":150,"x2":360,"y2":250}}}},
+    "load": {"Dyad":{"placement":{"diagram":{"x1":450,"y1":300,"x2":550,"y2":400}}}},
+    "battery": {"Dyad":{"placement":{"diagram":{"x1":450,"y1":600,"x2":550,"y2":700}}}},
+    "ground": {"Dyad":{"placement":{"diagram":{"x1":620,"y1":760,"x2":700,"y2":840}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[{"x":500,"y":200}],"E":2}]}},
+    "wire2": {"Dyad":{"edges":[{"S":1,"M":[{"x":380,"y":650},{"x":380,"y":350}],"E":2}]}},
+    "wire3": {"Dyad":{"edges":[{"S":1,"M":[],"E":-1},{"S":-1,"M":[{"x":660,"y":350}],"E":2},{"S":-1,"M":[],"E":3}],"junctions":[{"x":660,"y":650}]}}
+  }
+}
+end

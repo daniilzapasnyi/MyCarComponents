@@ -1,0 +1,77 @@
+# Adapted from official 16ESPD HandsOn04/RegenBlend.dyad (RegenBlend).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component RegenBlend
+  "Torque asked for at the machine shaft: positive drives, negative brakes"
+  tau_ref = RealInput() {^tau_ref}
+  "Vehicle speed [km/h]"
+  v = RealInput() {^v}
+  "1 while the ABS acts on a wheel the machine drives, else 0; present only with abs_rule = true"
+  abs_active = RealInput() if abs_rule {^abs_active}
+  "Torque the machine is asked for"
+  tau_motor = RealOutput() {^tau_motor}
+  "Friction brake torque asked of each of the four wheel brakes"
+  tau_brake = RealOutput() {^tau_brake}
+  "Single-speed reduction, machine to differential (Nissan)"
+  parameter ratio::Real = 8.193
+  "Wheel radius, to estimate the machine speed from the car's (repository default)"
+  parameter radius::Length = 0.31
+  "Torque limit: the machine's peak torque (Nissan)"
+  parameter tau_max::Torque = 320.0
+  "Charge-power limit: the 2013 Leaf pack's 10 s charge capability at 20 % depth of discharge; the ZE1's larger pack takes more (INL)"
+  parameter P_charge::Power = 80.5e3
+  "Speed below which the machine's braking ceiling fades to zero, km/h; no primary source, the plan's band is 5-10 km/h (assumed)"
+  parameter v_fade::Real = 10.0
+  "Add the ABS rule and its abs_active input: regen backs off while the ABS acts on a driven wheel"
+  structural parameter abs_rule::Boolean = false
+  "ABS rule on (1) or off (0), so one bench runs both; present only with abs_rule = true"
+  parameter withdraw::Real = 1.0 if abs_rule
+  "Time constant regen backs off with: the friction brakes' 30 ms build-up, PlanarCar's T_brake (assumed)"
+  parameter T_withdraw::Time = 0.03 if abs_rule
+  "Time constant regen returns with once the ABS stops acting (assumed)"
+  parameter T_return::Time = 0.5 if abs_rule
+  "Machine speed estimated from the car's speed"
+  variable w::AngularVelocity
+  "Fade factor: 1 above v_fade, 0 at standstill"
+  variable fade::Real
+  "Braking ceiling from the charge-power limit"
+  variable tau_power::Torque
+  "Braking ceiling from the low-speed fade"
+  variable tau_fade::Torque
+  "Braking ceiling: the smallest of the three limits, times allow under the ABS rule"
+  variable tau_regen_max::Torque
+  "Braking demand at the machine shaft"
+  variable tau_demand::Torque
+  "Braking torque the machine is asked for"
+  variable tau_regen::Torque
+  "Share of the ceiling the ABS rule allows: 1, falling to 0 while the ABS acts; present only with abs_rule = true"
+  variable allow::Real if abs_rule
+relations
+  w = max(v, 0.0) / 3.6 * ratio / radius
+  fade = min(max(v / v_fade, 0.0), 1.0)
+  # The 1 rad/s floor keeps the quotient finite at standstill, where the fade binds anyway.
+  tau_power = P_charge / max(w, 1.0)
+  tau_fade = fade * tau_max
+  if abs_rule
+    initial allow = 1.0
+    # abs_active is held between ABS samples, so the switch between the two rates falls on a
+    # sample instant and allow itself stays continuous.
+    der(allow) = ifelse(withdraw * abs_active > 0.5, -allow / T_withdraw, (1.0 - allow) / T_return)
+    tau_regen_max = allow * min(tau_max, min(tau_power, tau_fade))
+  else
+    tau_regen_max = min(tau_max, min(tau_power, tau_fade))
+  end
+  tau_demand = max(-tau_ref, 0.0)
+  tau_regen = min(tau_demand, tau_regen_max)
+  tau_motor = max(tau_ref, 0.0) - tau_regen
+  tau_brake = (tau_demand - tau_regen) * ratio / 4.0
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/Vehicle/Electric/RegenBlend.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "tau_ref": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":150,"x2":50,"y2":250},"icon":{"x1":-50,"y1":450,"x2":50,"y2":550}}}},
+    "v": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":550,"x2":50,"y2":650},"icon":{"x1":-50,"y1":800,"x2":50,"y2":900}}}},
+    "abs_active": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":950,"x2":50,"y2":1050},"icon":{"x1":-50,"y1":800,"x2":50,"y2":900}}}},
+    "tau_motor": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":150,"x2":1050,"y2":250},"icon":{"x1":950,"y1":450,"x2":1050,"y2":550}}}},
+    "tau_brake": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":550,"x2":1050,"y2":650},"icon":{"x1":950,"y1":800,"x2":1050,"y2":900}}}}
+  }
+}
+end

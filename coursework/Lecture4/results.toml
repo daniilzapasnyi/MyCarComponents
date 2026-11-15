@@ -1,0 +1,491 @@
+[BEV_WLTC]
+SoC_window_pass = true
+Wh_per_km = 131.26291206594937
+abstol = 1.0e-7
+distance_m = 23266.869982277523
+dtmax_s = 1.0
+final_SoC = 0.821857140054486
+finite_signals_pass = true
+max_speed_error_kmh = 1.6336889501939282
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 25.3082822
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1800.0
+stop_requested_s = 1800
+timestamp_utc = "2026-11-10T19:48:13.675"
+tracking_pass = true
+
+    [BEV_WLTC.nested_overrides]
+
+    [BEV_WLTC.parameters]
+
+[battery_100A]
+abstol = 1.0e-7
+dtmax_s = 1.0
+final_SoC = 0.46249920119106347
+final_SoC_pass = true
+final_SoC_reference = 0.4625
+final_SoC_tolerance = 0.002
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.9285288
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1860.0
+stop_requested_s = 1860
+timestamp_utc = "2026-11-10T19:48:11.019"
+
+    [battery_100A.nested_overrides]
+
+    [battery_100A.parameters]
+    I_load = "100.0"
+
+[battery_330A]
+abstol = 1.0e-7
+dtmax_s = 1.0
+final_SoC = -0.5437502655087278
+final_SoC_pass = true
+final_SoC_reference = -0.54375
+final_SoC_tolerance = 0.002
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0126452
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1860.0
+stop_requested_s = 1860
+timestamp_utc = "2026-11-10T19:48:13.361"
+
+    [battery_330A.nested_overrides]
+
+    [battery_330A.parameters]
+    I_load = "330.0"
+
+[battery_charge]
+abstol = 1.0e-7
+dtmax_s = 1.0
+final_SoC = 0.9875000134319218
+final_SoC_pass = true
+final_SoC_reference = 0.9875
+final_SoC_tolerance = 0.002
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0124636
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1860.0
+stop_requested_s = 1860
+timestamp_utc = "2026-11-10T19:48:13.188"
+
+    [battery_charge.nested_overrides]
+
+    [battery_charge.parameters]
+    I_load = "-20.0"
+
+[converter_150A]
+abstol = 1.0e-7
+converter_energy_pass = true
+current_max_A = 150.00000000000003
+dtmax_s = 0.05
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0412963
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 102.0
+stop_requested_s = 102
+timestamp_utc = "2026-11-10T19:48:09.914"
+
+    [converter_150A.nested_overrides]
+
+    [converter_150A.parameters]
+    I_ref = "150.0"
+
+[converter_300V]
+abstol = 1.0e-7
+converter_energy_pass = true
+current_max_A = 332.2000000000001
+dtmax_s = 0.05
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0439518
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 102.0
+stop_requested_s = 102
+timestamp_utc = "2026-11-10T19:48:09.010"
+
+    [converter_300V.nested_overrides]
+
+    [converter_300V.parameters]
+    V = "300.0"
+
+[converter_350V]
+abstol = 1.0e-7
+converter_energy_pass = true
+current_max_A = 332.20000000000005
+dtmax_s = 0.05
+finite_signals_pass = true
+plot_status = "exported"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 6.0215414
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 102.0
+stop_requested_s = 102
+timestamp_utc = "2026-11-10T20:58:00.813"
+
+    [converter_350V.nested_overrides]
+
+    [converter_350V.parameters]
+
+[converter_braking]
+abstol = 1.0e-7
+converter_energy_pass = true
+current_max_A = 0.0
+dtmax_s = 0.05
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0395098
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 102.0
+stop_requested_s = 102
+timestamp_utc = "2026-11-10T19:48:10.708"
+
+    [converter_braking.nested_overrides]
+
+    [converter_braking.parameters]
+    I_ref = "-500.0"
+
+[converter_held_10000]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_torque_Nm = 103.79148048225099
+final_torque_Nm_pass = true
+final_torque_Nm_reference = 103.8
+final_torque_Nm_tolerance = 0.3
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0392069
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 2.0
+stop_requested_s = 2
+timestamp_utc = "2026-11-10T20:03:51.483"
+
+    [converter_held_10000.nested_overrides]
+
+    [converter_held_10000.parameters]
+    rpm_end = "10000.0"
+    rpm_start = "10000.0"
+
+[converter_held_base]
+abstol = 1.0e-7
+dtmax_s = 0.05
+final_torque_Nm = 320.01862429211207
+final_torque_Nm_pass = true
+final_torque_Nm_reference = 320.0
+final_torque_Nm_tolerance = 0.3
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 6.0036876
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 2.0
+stop_requested_s = 2
+timestamp_utc = "2026-11-10T20:03:37.927"
+
+    [converter_held_base.nested_overrides]
+
+    [converter_held_base.parameters]
+    rpm_end = "3283.0"
+    rpm_start = "3283.0"
+
+[energy_aux500W]
+E_R0_Whpkm = 3.1500446591355424
+E_aux_Whpkm = 10.74483208764055
+E_brake_Whpkm = 0.12144581917080786
+E_cells_Whpkm = 138.68687938162708
+E_conv_Whpkm = 2.116980121539177
+E_dc_Whpkm = 135.53683472249023
+E_motor_Whpkm = 17.607887185280024
+E_road_Whpkm = 103.14391851059749
+E_tire_Whpkm = 1.801771072379151
+SoC_window_pass = true
+Wh_per_km = 135.56113935228765
+abstol = 1.0e-7
+distance_m = 23266.869982034463
+dtmax_s = 1.0
+energy_balance_pass = true
+energy_residual_Whpkm = -2.842122084289765e-8
+final_SoC = 0.8193297602303337
+finite_signals_pass = true
+max_speed_error_kmh = 1.6336889420627507
+plot_status = "exported from recorded CSV"
+recovery_percent = 23.157463834773218
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 12.2587534
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1800.0
+stop_requested_s = 1800
+terminal_consumption_Whpkm = 135.53683472249023
+terminal_consumption_Whpkm_pass = true
+terminal_consumption_Whpkm_reference = 135.49795671171992
+terminal_consumption_Whpkm_tolerance = 1.0
+timestamp_utc = "2026-11-10T19:49:56.725"
+tracking_pass = true
+
+    [energy_aux500W.nested_overrides]
+
+    [energy_aux500W.parameters]
+    P_aux = "500.0"
+
+[energy_bill]
+E_R0_Whpkm = 3.1033300598564306
+E_aux_Whpkm = 6.4468992553904085
+E_brake_Whpkm = 0.12144581855155429
+E_cells_Whpkm = 134.34185128863848
+E_conv_Whpkm = 2.1170024076046534
+E_dc_Whpkm = 131.23852122878324
+E_motor_Whpkm = 17.60748423857304
+E_road_Whpkm = 103.14391850916239
+E_tire_Whpkm = 1.8017710719553843
+SoC_window_pass = true
+Wh_per_km = 131.2629163295062
+abstol = 1.0e-7
+distance_m = 23266.869982441967
+dtmax_s = 1.0
+energy_balance_pass = true
+energy_residual_Whpkm = -2.6760932706526403e-8
+final_SoC = 0.8218571403216577
+finite_signals_pass = true
+max_speed_error_kmh = 1.6336889498241902
+plot_status = "exported from recorded CSV"
+recovery_percent = 23.796338645942033
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 15.3363573
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1800.0
+stop_requested_s = 1800
+terminal_consumption_Whpkm = 131.23852122878324
+terminal_consumption_Whpkm_pass = true
+terminal_consumption_Whpkm_reference = 131.2
+terminal_consumption_Whpkm_tolerance = 1.0
+timestamp_utc = "2026-11-10T19:49:37.604"
+tracking_pass = true
+
+    [energy_bill.nested_overrides]
+
+    [energy_bill.parameters]
+
+[hard_stop_friction]
+abstol = 1.0e-6
+battery_recovery_kJ = 0.0
+braking_distance_m = 26.931868020331862
+dtmax_s = 0.005
+finite_signals_pass = true
+friction_brake_kJ = 352.7062830472339
+gross_motor_braking_percent = 0.08920366701310323
+initial_dense_output_note = "Exact t=0 dense output was nonfinite; initial plotted sample is solver output at t=1e-9 s."
+minimum_front_slip_above3mps = -0.12446183848412423
+no_reverse_wheel_pass = true
+plot_status = "exported from recorded CSV"
+recovered_shaft_kJ = 0.3149078476115294
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 30.9346161
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 6.0
+stop_requested_s = 6
+stop_time_after_pedal_s = 2.33
+timestamp_utc = "2026-11-10T20:15:55.082"
+
+    [hard_stop_friction.nested_overrides]
+
+    [hard_stop_friction.parameters]
+    P_charge = "0.0"
+
+[hard_stop_regen]
+abstol = 1.0e-6
+battery_recovery_kJ = 2.956883496440434
+braking_distance_m = 27.099925532875076
+dtmax_s = 0.005
+finite_signals_pass = true
+friction_brake_kJ = 348.85047232585185
+gross_motor_braking_percent = 0.686583846716005
+initial_dense_output_note = "Exact t=0 dense output was nonfinite; initial plotted sample is solver output at t=1e-9 s."
+minimum_front_slip_above3mps = -0.12569754724278848
+no_reverse_wheel_pass = true
+plot_status = "exported from recorded CSV"
+recovered_shaft_kJ = 2.4117093993474374
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 90.6392719
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 6.0
+stop_requested_s = 6
+stop_time_after_pedal_s = 2.336
+timestamp_utc = "2026-11-10T20:13:31.224"
+
+    [hard_stop_regen.nested_overrides]
+
+    [hard_stop_regen.parameters]
+
+[lowgrip_regen]
+abstol = 1.0e-6
+braking_distance_m = 87.60373571656942
+dtmax_s = 0.005
+finite_signals_pass = true
+initial_dense_output_note = "Exact t=0 dense output was nonfinite; initial plotted sample is solver output at t=1e-9 s."
+minimum_front_slip_above3mps = -0.18712350327573574
+no_reverse_wheel_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 31.3655186
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 12.0
+stop_requested_s = 12
+stop_time_after_pedal_s = 7.667999999999999
+timestamp_utc = "2026-11-10T19:59:45.622"
+
+    [lowgrip_regen.nested_overrides]
+
+    [lowgrip_regen.parameters]
+
+[machine_200V]
+abstol = 1.0e-7
+dtmax_s = 0.05
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.0370476
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 12.0
+stop_requested_s = 12
+timestamp_utc = "2026-11-10T19:47:59.829"
+
+    [machine_200V.nested_overrides]
+
+    [machine_200V.parameters]
+    V = "200.0"
+    rpm_end = "2100.0"
+    rpm_start = "1500.0"
+
+[machine_350V]
+abstol = 1.0e-7
+dtmax_s = 0.05
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 1.2189236
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 12.0
+stop_requested_s = 12
+timestamp_utc = "2026-11-10T19:47:53.020"
+
+    [machine_350V.nested_overrides]
+
+    [machine_350V.parameters]
+
+[regen_15kW]
+SoC_window_pass = true
+Wh_per_km = 134.69393603307847
+abstol = 1.0e-7
+distance_m = 23266.86460618444
+dtmax_s = 1.0
+final_SoC = 0.8199212639764144
+finite_signals_pass = true
+max_speed_error_kmh = 1.6308988571335306
+plot_status = "exported from recorded CSV"
+recovery_percent = 21.398082041584928
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 10.8476582
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1800.0
+stop_requested_s = 1800
+timestamp_utc = "2026-11-10T19:49:25.691"
+tracking_pass = true
+
+    [regen_15kW.nested_overrides]
+
+    [regen_15kW.parameters]
+    P_charge = "15000.0"
+
+[regen_WLTC]
+SoC_window_pass = true
+Wh_per_km = 131.16973733342732
+abstol = 1.0e-7
+distance_m = 23266.86460590512
+dtmax_s = 1.0
+final_SoC = 0.8219112351938798
+finite_signals_pass = true
+max_speed_error_kmh = 1.6336889453640246
+plot_status = "exported from recorded CSV"
+recovery_percent = 23.852634794312074
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 13.6238633
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 1800.0
+stop_requested_s = 1800
+timestamp_utc = "2026-11-10T19:49:07.937"
+tracking_pass = true
+
+    [regen_WLTC.nested_overrides]
+
+    [regen_WLTC.parameters]

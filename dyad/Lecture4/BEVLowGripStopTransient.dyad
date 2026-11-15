@@ -1,0 +1,5 @@
+analysis BEVLowGripStopTransient
+  extends TransientAnalysis(stop = 12, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None(), dtmax = 1.0)
+  parameter withdraw::Real = 1.0
+  model = BEVLowGripStop(withdraw = withdraw)
+end
