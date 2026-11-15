@@ -1,0 +1,4 @@
+analysis TestBodyTransient
+  extends TransientAnalysis(stop = 500, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = TestBody()
+end

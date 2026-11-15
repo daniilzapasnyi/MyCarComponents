@@ -1,0 +1,26 @@
+# Adapted from the official 16ESPD build guide / Lecture1/CarStepTest.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component CarStepTest
+  "Cruise torque before the step (holds 90 km/h)"
+  parameter tau_lo::Torque = 31.078
+  "Cruise torque after the step (holds 110 km/h)"
+  parameter tau_hi::Torque = 40.119
+  "Initial speed, matching the tau_lo cruise (25 m/s = 90 km/h)"
+  parameter v0::Velocity = 25.0
+  "Time of the torque step"
+  parameter t_step::Time = 50.0
+  plant = Car() {^plant}
+  cmd = BlockComponents.Sources.Step(offset = tau_lo, height = tau_hi - tau_lo, start_time = t_step) {^cmd}
+relations
+  connect(cmd.y, plant.tau_cmd) {^wire1}
+  initial plant.body.mass.s = 0.0
+  initial plant.body.mass.v = v0
+  initial plant.engine.lag.x = tau_lo
+metadata {
+  "_links": {
+    "plant": {"Dyad":{"placement":{"diagram":{"x1":450,"x2":550,"y1":450,"y2":550}}}},
+    "cmd": {"Dyad":{"placement":{"diagram":{"x1":150,"x2":250,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end

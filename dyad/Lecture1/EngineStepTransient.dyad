@@ -1,0 +1,4 @@
+analysis EngineStepTransient
+  extends TransientAnalysis(stop = 3, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = EngineStep()
+end

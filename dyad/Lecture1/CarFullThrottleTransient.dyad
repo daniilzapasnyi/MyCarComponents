@@ -1,0 +1,4 @@
+analysis CarFullThrottleTransient
+  extends TransientAnalysis(stop = 300, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = CarFullThrottle()
+end

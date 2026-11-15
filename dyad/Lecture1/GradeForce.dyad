@@ -1,0 +1,21 @@
+# Adapted from the official 16ESPD build guide / HandsOn/GradeForce.dyad
+# Reference: lecture-05-dyad-3.5. Student package implementation; see coursework/SOURCES.md.
+component GradeForce
+  extends TranslationalComponents.Interfaces.PartialForce
+  "Road gradient, tan(alpha)"
+  grade = RealInput() {^grade}
+  "Vehicle mass"
+  parameter m::Dyad.Mass = 1400
+  "Gravitational acceleration"
+  parameter g::Acceleration = 9.80665
+relations
+  # A force source acts on the body with -f, so a climb (positive grade) needs positive f to
+  # hold the car back.
+  f = m * g * sin(atan(grade))
+metadata {
+  "Dyad": {"icons":{"default":"dyad://VehicleSystemsComponents/HandsOn/GradeForce.svg"},"labels":[{"label":"$(instance)","x":500,"y":1100,"rot":0}]},
+  "_links": {
+    "grade": {"Dyad":{"placement":{"diagram":{"x1":-40,"x2":60,"y1":450,"y2":550}}}}
+  }
+}
+end

@@ -1,0 +1,44 @@
+"Cruise step, climb, noise and tuning experiments using the student's controller and car."
+component CruiseExperiment
+  parameter with_I::Boolean = true
+  parameter with_D::Boolean = true
+  parameter anti_windup::Boolean = false
+  parameter k::Real = 56
+  parameter Ti::Time = 10
+  parameter Td::Time = 0.5
+  parameter Nd::Real = 10
+  parameter wd::Real = 0
+  parameter y_max::Real = 1e6
+  parameter y_min::Real = -1e6
+  parameter T_max::Torque = 150
+  parameter m::Mass = 1400
+  structural parameter theta_e::Time = 0.3
+  parameter speed0::Real = 90
+  parameter step_height::Real = 20
+  parameter hill::Real = 0
+  parameter amplitude::Real = 0
+  parameter torque0::Torque = 31.078
+  demand = BlockComponents.Sources.Step(offset = speed0, height = step_height, start_time = 0) {^demand}
+  road = BlockComponents.Sources.Pulse(amplitude = hill, offset = 0, start_time = 30, duty_cycle = 1.0, period = 120) {^road}
+  plant = GradeCar(T_max = T_max, m = m, theta_e = theta_e) {^plant}
+  controller = CruiseController(with_I = with_I, with_D = with_D, anti_windup = anti_windup, k = k, Ti = Ti, Td = Td, Nd = Nd, wd = wd, xd0 = (wd - 1) * speed0, y_max = y_max, y_min = y_min) {^controller}
+  noise = MeasurementNoise(amplitude = amplitude) {^noise}
+relations
+  connect(demand.y, controller.u_s)
+  connect(plant.v_kmh, noise.u)
+  connect(noise.y, controller.u_m)
+  connect(controller.y, plant.tau_cmd)
+  connect(road.y, plant.grade)
+  initial plant.body.mass.s = 0
+  initial plant.body.mass.v = speed0 / 3.6
+  initial plant.engine.lag.x = torque0
+metadata {
+  "_links": {
+    "demand": {"Dyad":{"placement":{"diagram":{"x1":30,"y1":170,"x2":130,"y2":270}}}},
+    "road": {"Dyad":{"placement":{"diagram":{"x1":310,"y1":750,"x2":410,"y2":850}}}},
+    "plant": {"Dyad":{"placement":{"diagram":{"x1":700,"y1":310,"x2":800,"y2":410}}}},
+    "controller": {"Dyad":{"placement":{"diagram":{"x1":300,"y1":310,"x2":400,"y2":410}}}},
+    "noise": {"Dyad":{"placement":{"diagram":{"x1":510,"y1":630,"x2":610,"y2":730}}}}
+  }
+}
+end

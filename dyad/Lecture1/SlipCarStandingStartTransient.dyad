@@ -1,0 +1,4 @@
+analysis SlipCarStandingStartTransient
+  extends TransientAnalysis(stop = 5, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = SlipCarStandingStart()
+end

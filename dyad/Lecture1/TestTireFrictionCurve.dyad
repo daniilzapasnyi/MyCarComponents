@@ -1,0 +1,16 @@
+# Adapted from official 16ESPD HandsOn/TireFrictionCurve.dyad (TestTireFrictionCurve).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+test component TestTireFrictionCurve
+  "Slip swept from a locked wheel under braking to full wheelspin"
+  slip = BlockComponents.Sources.Ramp(offset = -1, height = 2, duration = 2, start_time = 0) {^slip}
+  curve = TireFrictionCurve() {^curve}
+relations
+  connect(slip.y, curve.kappa) {^wire1}
+metadata {
+  "_links": {
+    "slip": {"Dyad":{"placement":{"diagram":{"x1":200,"x2":300,"y1":450,"y2":550}}}},
+    "curve": {"Dyad":{"placement":{"diagram":{"x1":500,"x2":600,"y1":450,"y2":550}}}},
+    "wire1": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end

@@ -1,0 +1,5 @@
+"Reproducible CarStepTest experiment; see the lecture report for validation status."
+analysis CarStepTestTransient
+  extends TransientAnalysis(stop = 500, alg = ODEAlg.Rodas5P(), optimize = OptimizationLevel.None())
+  model = CarStepTest()
+end
