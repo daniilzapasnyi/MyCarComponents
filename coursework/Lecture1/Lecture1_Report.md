@@ -8,6 +8,10 @@ My controller has selectable P, PI and filtered PID branches, with speed error i
 
 I followed the official [car build](https://dr14-make.github.io/16ESPD/handson/lecture-01/) and [controller build](https://dr14-make.github.io/16ESPD/lecture/lecture-01/). The teaching examples are credited in [SOURCES.md](../SOURCES.md).
 
+### Step 01 editor checkpoint
+
+[`Tour`](../../dyad/Lecture1/Tour.dyad) reconstructs the introductory editor exercise. It connects the sixth-order Padé delay (`n = 6`, `m = 5`, `delayTime = 0.3 s`) to a first-order lag (`T = 0.3 s`). The delay input is intentionally open at this checkpoint. [`Engine`](../../dyad/engine.dyad) completes the signal chain for Step 02. The separate `Tour` component was added during submission preparation, after the later lecture checkpoints.
+
 ## How I tested it
 
 I used Julia for Dyad 3.5 in the project environment. I ran component benches, acceleration, a torque step, P/PI/PID, the 10% hill, measurement noise, extra payload, doubled engine delay, dry/slippery launches and the 4–12 s ice patch. The additional runner covers the sampled-controller demo. [TEST_RESULTS.md](TEST_RESULTS.md) links every recorded experiment to its solver status, CSV and graph.
@@ -34,4 +38,4 @@ The simple engine has no rev limiter, so wheel speeds on ice become unrealistic.
 
 The installed discrete PID starts derivative memory at zero. The sampled demo uses its supported InitialOutput initialization with the expected first proportional step, preventing an unrelated derivative spike from the initial 90 km/h measurement. This adjustment is recorded per run. Some sampled analyses return NaN for dense interpolation exactly at the initial clock tick; the first plotted sample then uses the solver's right-hand output at 1 ns, with an explicit note in results.toml.
 
-The code/diagram round trip was checked in Studio 3.5.1 during the diagram repair. Conditional I/D selection and anti-windup are equations in the source, so their full logic must be read in code. Personal screenshots still need to be taken. No submission has been made.
+The code/diagram round trip was checked in Studio 3.5.1 during the diagram repair. Conditional I/D selection and anti-windup are equations in the source, so their full logic must be read in code.

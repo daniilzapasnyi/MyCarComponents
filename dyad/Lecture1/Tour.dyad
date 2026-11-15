@@ -1,0 +1,14 @@
+"Lecture 1 editor checkpoint: the delay and lag that precede the engine torque limiter."
+component Tour
+  delay = BlockComponents.Nonlinear.PadeDelay(n = 6, m = 5, delayTime = 0.3) {^delay}
+  lag = BlockComponents.Continuous.FirstOrder(T = 0.3) {^lag}
+relations
+  connect(delay.y, lag.u) {^signal}
+metadata {
+  "_links": {
+    "delay": {"Dyad":{"placement":{"diagram":{"x1":250,"x2":390,"y1":430,"y2":570}}}},
+    "lag": {"Dyad":{"placement":{"diagram":{"x1":610,"x2":750,"y1":430,"y2":570}}}},
+    "signal": {"Dyad":{"edges":[{"S":1,"M":[],"E":2}],"path":{}}}
+  }
+}
+end
