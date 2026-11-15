@@ -10,15 +10,15 @@ I started at 25 m/s, applied the pedal at 0.5 s, and tested pedal settings 0.3 a
 
 ## What results I obtained
 
-| Road multiplier | Locked, pedal 0.6 | Slip ABS | Wheel-speed ABS |
-|---:|---:|---:|---:|
-| 1.0 | 43.705 m | 34.213 m | 38.517 m |
-| 0.5 | 85.057 m | 64.603 m | 78.009 m |
-| 0.3 | 136.745 m | 106.053 m | 130.560 m |
+| Road multiplier | Locked, pedal 0.6 | Slip ABS | Wheel-speed ABS | Course ECU, 5 ms |
+|---:|---:|---:|---:|---:|
+| 1.0 | 43.705 m | 34.213 m | 38.517 m | 38.70 m |
+| 0.5 | 85.057 m | 64.603 m | 78.009 m | 83.19 m |
+| 0.3 | 136.745 m | 106.053 m | 130.560 m | 141.27 m |
 
 These agree with the guide's rounded values within 0.1 m. Pedal 0.3 stops the dry-road car in 35.954 m, shorter than locking the wheel with a harder push. Without look-ahead the slip controller takes 53.351 m, longer than the locked case.
 
-The library's 5 ms wheel-speed ECU stopped in 38.70 m on dry road, 83.19 m on wet road and 141.27 m on snow, against 38.7, 83.2 and 141.3 m in the guide. Reducing `a_ref` to 2.4 m/s² reduced the library ECU's snow stop to 128.44 m. My wheel-speed controller stopped in 130.95 m on snow and 106.32 m on dry road at the same setting. The low estimate barely changes the snow stop and causes premature release on dry road. See [check results](abs_reference_results.toml) and [reproduction script](../../scripts/check_abs_reference.jl).
+The course ECU takes longer than a locked wheel to stop on snow at the default `a_ref`. Reducing `a_ref` to 2.4 m/s² reduces that stop to 128.44 m. The project’s wheel-speed controller stops in 130.95 m on snow and 106.32 m on dry road at the same setting. The lower estimate barely changes its snow stop and causes premature release on dry road. See [check results](abs_reference_results.toml) and [reproduction script](../../scripts/check_abs_reference.jl).
 
 Analytical constant-friction bounds are about 31.9 m at peak dry grip and 45.5 m sliding; at multiplier 0.3 they are 106.2 and 151.7 m. These are estimates, excluding aerodynamic and rolling assistance.
 
