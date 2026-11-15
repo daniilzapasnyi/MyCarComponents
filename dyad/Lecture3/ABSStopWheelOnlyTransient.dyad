@@ -1,0 +1,6 @@
+analysis ABSStopWheelOnlyTransient
+  extends TransientAnalysis(stop = 20, alg = ODEAlg.Tsit5(), dtmax = 0.001, optimize = OptimizationLevel.None())
+  parameter road_mu::Real = 1.0
+  parameter a_ref::Acceleration = 8
+  model = ABSStopWheelOnly(road_mu = road_mu, a_ref = a_ref)
+end

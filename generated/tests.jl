@@ -30,3 +30,4 @@ include("MyManifold_test.jl")
 end
 include("Lecture1/tests.jl")
 include("Lecture2/tests.jl")
+include("Lecture3/tests.jl")

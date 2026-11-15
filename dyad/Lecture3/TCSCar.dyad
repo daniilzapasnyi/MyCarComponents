@@ -1,0 +1,86 @@
+# Adapted from official 16ESPD HandsOn03/TCSCar.dyad (TCSCar).
+# Reference: lecture-05-dyad-3.5; see coursework/SOURCES.md.
+component TCSCar
+  "Driver's throttle pedal, 0 released to 1 floored"
+  pedal = RealInput() {^pedal}
+  "TCS throttle limit, zero to one"
+  u_tcs = RealInput() {^u_tcs}
+  "Allowed wheel-circuit pressure"
+  p_cmd = RealInput() {^p_cmd}
+  "Road-friction multiplier"
+  mu_scale = RealInput() {^mu_scale}
+  "Longitudinal tire slip"
+  kappa = RealOutput() {^kappa}
+  "Vehicle speed"
+  v = RealOutput() {^v}
+  throttle_limit = BlockComponents.Math.Min() {^throttle_limit}
+  engine = MyCarComponents.Lecture2.MapEngineFuelCut() {^engine}
+  "Crankshaft and flywheel, J as MappedEngine assumes"
+  flywheel = RotationalComponents.Components.Inertia(J = 0.15) {^flywheel}
+  clutch = VehicleSystemsComponents.Vehicle.CentrifugalClutch() {^clutch}
+  variator = VehicleSystemsComponents.Vehicle.ControlledVariator() {^variator}
+  supply_command = BlockComponents.Sources.Constant(k = supply_pressure) {^supply_command}
+  supply = HydraulicComponents.Sources.BoundaryPressure() {^supply}
+  valve_f = VehicleSystemsComponents.Vehicle.Brake.ABSValve() {^valve_f}
+  valve_r = VehicleSystemsComponents.Vehicle.Brake.ABSValve() {^valve_r}
+  line_f = VehicleSystemsComponents.Vehicle.Brake.BrakeLine() {^line_f}
+  line_r = VehicleSystemsComponents.Vehicle.Brake.BrakeLine(L = 4.0) {^line_r}
+  wheel = VehicleSystemsComponents.Vehicle.Wheel.HydraulicBrakedWheel(F_z = m * g / 2) {^wheel}
+  body = MyCarComponents.Body(m = m, g = g) {^body}
+  "Engine mounts, transmission housing, and brake support"
+  housing = RotationalComponents.Components.Fixed() {^housing}
+  speed = TranslationalComponents.Sensors.VelocitySensor() {^speed}
+  path medium::HydraulicComponents.Interfaces.AbstractMedium = HydraulicComponents.IsothermalCompressible(bulk_modulus = 1.4e9, density = 1045.0, let_gas = false)
+  "Vehicle mass; the driven axle carries half of it"
+  parameter m::Dyad.Mass = 1400.0
+  "Gravitational acceleration"
+  parameter g::Acceleration = 9.80665
+  "Pressure available from the pump and accumulator"
+  parameter supply_pressure::Pressure = 8.9e6
+relations
+  connect(pedal, throttle_limit.u1, variator.pedal)
+  connect(u_tcs, throttle_limit.u2)
+  connect(throttle_limit.y, engine.pedal)
+  connect(engine.spline, flywheel.spline_a)
+  connect(flywheel.spline_b, clutch.spline_a)
+  connect(clutch.spline_b, variator.spline_a)
+  connect(variator.spline_b, wheel.spline)
+  connect(engine.support, clutch.support, variator.support, wheel.support, housing.spline)
+  connect(supply_command.y, supply.p)
+  connect(supply.port, valve_f.port_a, valve_r.port_a)
+  connect(valve_f.port_b, line_f.port_a)
+  connect(line_f.port_b, wheel.front)
+  connect(valve_r.port_b, line_r.port_a)
+  connect(line_r.port_b, wheel.rear)
+  continuity(medium, supply.port.medium)
+  connect(p_cmd, valve_f.p_cmd, valve_r.p_cmd)
+  connect(mu_scale, wheel.mu_scale)
+  connect(wheel.flange, body.flange, speed.flange)
+  connect(wheel.kappa, kappa)
+  connect(speed.v, v)
+metadata {
+  "_links": {
+    "pedal": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":50,"x2":50,"y2":150}}}},
+    "u_tcs": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":180,"x2":50,"y2":280}}}},
+    "p_cmd": {"Dyad":{"placement":{"diagram":{"x1":-50,"y1":700,"x2":50,"y2":800}}}},
+    "mu_scale": {"Dyad":{"placement":{"diagram":{"x1":650,"y1":750,"x2":750,"y2":850}}}},
+    "kappa": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":50,"x2":1050,"y2":150}}}},
+    "v": {"Dyad":{"placement":{"diagram":{"x1":950,"y1":450,"x2":1050,"y2":550}}}},
+    "throttle_limit": {"Dyad":{"placement":{"diagram":{"x1":50,"y1":50,"x2":130,"y2":130}}}},
+    "engine": {"Dyad":{"placement":{"diagram":{"x1":90,"y1":50,"x2":190,"y2":150}}}},
+    "flywheel": {"Dyad":{"placement":{"diagram":{"x1":230,"y1":50,"x2":330,"y2":150}}}},
+    "clutch": {"Dyad":{"placement":{"diagram":{"x1":370,"y1":50,"x2":470,"y2":150}}}},
+    "variator": {"Dyad":{"placement":{"diagram":{"x1":510,"y1":50,"x2":610,"y2":150}}}},
+    "supply_command": {"Dyad":{"placement":{"diagram":{"x1":40,"y1":470,"x2":120,"y2":550}}}},
+    "supply": {"Dyad":{"placement":{"diagram":{"x1":160,"y1":470,"x2":240,"y2":550}}}},
+    "valve_f": {"Dyad":{"placement":{"diagram":{"x1":330,"y1":390,"x2":410,"y2":470}}}},
+    "valve_r": {"Dyad":{"placement":{"diagram":{"x1":330,"y1":550,"x2":410,"y2":630}}}},
+    "line_f": {"Dyad":{"placement":{"diagram":{"x1":480,"y1":390,"x2":560,"y2":470}}}},
+    "line_r": {"Dyad":{"placement":{"diagram":{"x1":480,"y1":550,"x2":560,"y2":630}}}},
+    "wheel": {"Dyad":{"placement":{"diagram":{"x1":700,"y1":180,"x2":840,"y2":320}}}},
+    "body": {"Dyad":{"placement":{"diagram":{"x1":900,"y1":210,"x2":980,"y2":290}}}},
+    "housing": {"Dyad":{"placement":{"diagram":{"x1":510,"y1":230,"x2":570,"y2":290}}}},
+    "speed": {"Dyad":{"placement":{"diagram":{"x1":900,"y1":350,"x2":980,"y2":430}}}}
+  }
+}
+end

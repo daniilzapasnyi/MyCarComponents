@@ -10,6 +10,7 @@ const CASES_ARG = findfirst(startswith("--cases="),ARGS)
 const CASES = CASES_ARG === nothing ? Set{String}() : Set(split(split(ARGS[CASES_ARG],"=";limit=2)[2],','))
 const L1 = MyCarComponents.Lecture1
 const L2 = MyCarComponents.Lecture2
+const L3 = MyCarComponents.Lecture3
 const JOURNAL = joinpath(ROOT, "coursework", "validation.log")
 function logline(s)
     println(s); flush(stdout)
@@ -192,6 +193,22 @@ for (speed,pedal,rpm,pressure,ref) in [(50.0,0.0486,1992.0,40100.0,3.7),(90.0,0.
 end
 for (id,ctor,stop) in [("mapped_WOT",L2.MappedCarWOT,300),("coast_down",L2.MappedCarCoast,100),("brake_stop",L2.MappedCarBrakeStop,20)]
     sim(2,id,ctor;stop,dt=0.05,paths=["speed_kmh"=>"car.v_kmh","fuel_kgps"=>"car.engine.mdot_fuel","pressure_Pa"=>"car.engine.p_m"],evaluate=fuel_eval)
+end
+
+end
+if isempty(SELECTED) || 3 in SELECTED
+for (name,ctor,refs) in [("locked",L3.PedalStop,[43.7,85.1,136.7]),("slip_ABS",L3.ABSStop,[34.2,64.6,106.1]),("wheel_ABS",L3.ABSStopWheelOnly,[38.5,78.0,130.6])]
+    for (j,mu) in enumerate([1.0,0.5,0.3])
+        sim(3,"$(name)_mu$(mu)",ctor;stop=0.5+1.5*25/(0.7mu*9.80665)+1,kwargs=(road_mu=mu,),dt=0.002,
+            alg=name=="wheel_ABS" ? ODEAlg.Tsit5() : ODEAlg.Rodas5P(),dtmax=name=="wheel_ABS" ? 0.001 : 0.003,abstol=1e-6,reltol=1e-6,
+            paths=["speed_mps"=>"body.mass.v","slip_ratio"=>"wheel.kappa","master_pressure_Pa"=>"master.p_mc","front_pressure_Pa"=>"wheel.caliper_f.p"],
+            evaluate=(r,m,t,v,d)->begin dist=VehicleSystemsComponents.Vehicle.braking_distance(r);compare!(d,"braking_distance_m",dist,refs[j],0.3);d["peak_master_pressure_bar"]=maximum(v["master_pressure_Pa"])/1e5;end)
+    end
+end
+for (id,ctor,kw,ref) in [("gentle_pedal",L3.PedalStop,(pedal=0.3,),36.0),("no_lookahead",L3.ABSStop,(T_p=0.0,),53.4)]
+    sim(3,id,ctor;stop=10,kwargs=kw,dt=0.002,dtmax=0.003,
+        paths=["speed_mps"=>"body.mass.v","slip_ratio"=>"wheel.kappa","front_pressure_Pa"=>"wheel.caliper_f.p"],
+        evaluate=(r,m,t,v,d)->compare!(d,"braking_distance_m",VehicleSystemsComponents.Vehicle.braking_distance(r),ref,0.3))
 end
 
 end

@@ -1,0 +1,372 @@
+[TCS_both]
+abstol = 1.0e-5
+dtmax_s = 0.001
+final_speed_mps = 6.443873803754871
+final_speed_mps_pass = true
+final_speed_mps_reference = 6.45
+final_speed_mps_tolerance = 0.15
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-5
+retcode = "Success"
+runtime_s = 3.1159599
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 10.0
+stop_requested_s = 10
+timestamp_utc = "2026-11-10T19:53:37.044"
+
+    [TCS_both.nested_overrides]
+
+    [TCS_both.parameters]
+    brake_enabled = "1.0"
+    engine_enabled = "1.0"
+
+[TCS_brake]
+abstol = 1.0e-5
+dtmax_s = 0.001
+final_speed_mps = 5.987554507198458
+final_speed_mps_pass = true
+final_speed_mps_reference = 5.99
+final_speed_mps_tolerance = 0.15
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-5
+retcode = "Success"
+runtime_s = 1.4547878
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 10.0
+stop_requested_s = 10
+timestamp_utc = "2026-11-10T19:53:32.305"
+
+    [TCS_brake.nested_overrides]
+
+    [TCS_brake.parameters]
+    brake_enabled = "1.0"
+    engine_enabled = "0.0"
+
+[TCS_engine]
+abstol = 1.0e-5
+dtmax_s = 0.001
+final_speed_mps = 6.625471303808225
+final_speed_mps_pass = true
+final_speed_mps_reference = 6.62
+final_speed_mps_tolerance = 0.15
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-5
+retcode = "Success"
+runtime_s = 2.4231503
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 10.0
+stop_requested_s = 10
+timestamp_utc = "2026-11-10T19:53:34.177"
+
+    [TCS_engine.nested_overrides]
+
+    [TCS_engine.parameters]
+    brake_enabled = "0.0"
+    engine_enabled = "1.0"
+
+[TCS_off]
+abstol = 1.0e-5
+dtmax_s = 0.001
+final_speed_mps = 5.640458928850557
+final_speed_mps_pass = true
+final_speed_mps_reference = 5.64
+final_speed_mps_tolerance = 0.15
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-5
+retcode = "Success"
+runtime_s = 10.4012242
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 10.0
+stop_requested_s = 10
+timestamp_utc = "2026-11-10T19:53:11.064"
+
+    [TCS_off.nested_overrides]
+
+    [TCS_off.parameters]
+    brake_enabled = "0.0"
+    engine_enabled = "0.0"
+
+[gentle_pedal]
+abstol = 1.0e-7
+braking_distance_m = 35.954383049972776
+braking_distance_m_pass = true
+braking_distance_m_reference = 36.0
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.3498444
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 10.0
+stop_requested_s = 10
+timestamp_utc = "2026-11-10T19:47:51.084"
+
+    [gentle_pedal.nested_overrides]
+
+    [gentle_pedal.parameters]
+    pedal = "0.3"
+
+["locked_mu0.3"]
+abstol = 1.0e-7
+braking_distance_m = 136.74484697379336
+braking_distance_m_pass = true
+braking_distance_m_reference = 136.7
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.2098138
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 19.70921808889158
+stop_requested_s = 19.70921808889158
+timestamp_utc = "2026-11-10T19:46:59.264"
+
+    ["locked_mu0.3".nested_overrides]
+
+    ["locked_mu0.3".parameters]
+    road_mu = "0.3"
+
+["locked_mu0.5"]
+abstol = 1.0e-7
+braking_distance_m = 85.05660523615924
+braking_distance_m_pass = true
+braking_distance_m_reference = 85.1
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.2017023
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 12.425530853334948
+stop_requested_s = 12.425530853334948
+timestamp_utc = "2026-11-10T19:46:58.852"
+
+    ["locked_mu0.5".nested_overrides]
+
+    ["locked_mu0.5".parameters]
+    road_mu = "0.5"
+
+["locked_mu1.0"]
+abstol = 1.0e-7
+braking_distance_m = 43.70482461983559
+braking_distance_m_pass = true
+braking_distance_m_reference = 43.7
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 17.3140264
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 6.962765426667474
+stop_requested_s = 6.962765426667474
+timestamp_utc = "2026-11-10T19:46:25.930"
+
+    ["locked_mu1.0".nested_overrides]
+
+    ["locked_mu1.0".parameters]
+    road_mu = "1.0"
+
+[no_lookahead]
+abstol = 1.0e-7
+braking_distance_m = 53.35127347088938
+braking_distance_m_pass = true
+braking_distance_m_reference = 53.4
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.2029784
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 10.0
+stop_requested_s = 10
+timestamp_utc = "2026-11-10T19:47:52.161"
+
+    [no_lookahead.nested_overrides]
+
+    [no_lookahead.parameters]
+    T_p = "0.0"
+
+["slip_ABS_mu0.3"]
+abstol = 1.0e-7
+braking_distance_m = 106.05262890718619
+braking_distance_m_pass = true
+braking_distance_m_reference = 106.1
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.3239947
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 19.70921808889158
+stop_requested_s = 19.70921808889158
+timestamp_utc = "2026-11-10T19:47:06.597"
+
+    ["slip_ABS_mu0.3".nested_overrides]
+
+    ["slip_ABS_mu0.3".parameters]
+    road_mu = "0.3"
+
+["slip_ABS_mu0.5"]
+abstol = 1.0e-7
+braking_distance_m = 64.60286861438004
+braking_distance_m_pass = true
+braking_distance_m_reference = 64.6
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-7
+retcode = "Success"
+runtime_s = 0.2316389
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 12.425530853334948
+stop_requested_s = 12.425530853334948
+timestamp_utc = "2026-11-10T19:47:06.173"
+
+    ["slip_ABS_mu0.5".nested_overrides]
+
+    ["slip_ABS_mu0.5".parameters]
+    road_mu = "0.5"
+
+["slip_ABS_mu1.0"]
+abstol = 1.0e-6
+braking_distance_m = 34.212648393169324
+braking_distance_m_pass = true
+braking_distance_m_reference = 34.2
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.003
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported"
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 17.4729672
+simulation_pass = true
+solver = "Rodas5P"
+status = "passed"
+stop_actual_s = 6.962765426667474
+stop_requested_s = 6.962765426667474
+timestamp_utc = "2026-11-10T20:57:25.736"
+
+    ["slip_ABS_mu1.0".nested_overrides]
+
+    ["slip_ABS_mu1.0".parameters]
+    road_mu = "1.0"
+
+["wheel_ABS_mu0.3"]
+abstol = 1.0e-6
+braking_distance_m = 130.5595757338594
+braking_distance_m_pass = true
+braking_distance_m_reference = 130.6
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.001
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 1.6033758
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 19.70921808889158
+stop_requested_s = 19.70921808889158
+timestamp_utc = "2026-11-10T19:55:40.676"
+
+    ["wheel_ABS_mu0.3".nested_overrides]
+
+    ["wheel_ABS_mu0.3".parameters]
+    road_mu = "0.3"
+
+["wheel_ABS_mu0.5"]
+abstol = 1.0e-6
+braking_distance_m = 78.00863184141296
+braking_distance_m_pass = true
+braking_distance_m_reference = 78.0
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.001
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 1.2682714
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 12.425530853334948
+stop_requested_s = 12.425530853334948
+timestamp_utc = "2026-11-10T19:55:39.187"
+
+    ["wheel_ABS_mu0.5".nested_overrides]
+
+    ["wheel_ABS_mu0.5".parameters]
+    road_mu = "0.5"
+
+["wheel_ABS_mu1.0"]
+abstol = 1.0e-6
+braking_distance_m = 38.51695252229151
+braking_distance_m_pass = true
+braking_distance_m_reference = 38.5
+braking_distance_m_tolerance = 0.3
+dtmax_s = 0.001
+finite_signals_pass = true
+peak_master_pressure_bar = 89.16185861331428
+plot_status = "exported from recorded CSV"
+reltol = 1.0e-6
+retcode = "Success"
+runtime_s = 15.9520969
+simulation_pass = true
+solver = "Tsit5"
+status = "passed"
+stop_actual_s = 6.962765426667474
+stop_requested_s = 6.962765426667474
+timestamp_utc = "2026-11-10T19:55:05.592"
+
+    ["wheel_ABS_mu1.0".nested_overrides]
+
+    ["wheel_ABS_mu1.0".parameters]
+    road_mu = "1.0"

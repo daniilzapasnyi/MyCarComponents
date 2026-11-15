@@ -1,0 +1,8 @@
+analysis ABSStopTransient
+  extends TransientAnalysis(stop = 20, alg = ODEAlg.Rodas5P(), dtmax = 0.003, abstol = 1e-7, reltol = 1e-7, optimize = OptimizationLevel.None())
+  parameter road_mu::Real = 1.0
+  parameter T_p::Time = 0.03
+  parameter lambda_target::Real = 0.04
+  parameter pedal::Real = 0.6
+  model = ABSStop(road_mu = road_mu, T_p = T_p, lambda_target = lambda_target, pedal = pedal)
+end
